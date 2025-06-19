@@ -1,0 +1,201 @@
+:root {
+  --primary: #0066cc;
+  --secondary: #5b27b6;
+  --light: #ffffff;
+  --text: #333;
+  --link: #cce6ff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background-color: #f4f6fa;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+}
+
+.left-panel {
+  background-color: var(--primary);
+  color: white;
+  width: 50%;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.logo-icon {
+  width: 100px;
+  height: 100px;
+}
+
+.Logo-Title{
+    font-family: 'Josefin Sans';
+}
+
+h1 {
+  font-size: 36px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+h2 {
+  font-size: 22px;
+  margin-top: 5px;
+  font-weight: 400;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+}
+
+label {
+  display: block;
+  margin: 15px 0 5px;
+  font-size: 15px;
+}
+
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+  outline: none;
+  margin-bottom: 10px;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper .eye-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 18px;
+  opacity: 0.7;
+}
+
+.links {
+  font-size: 14px;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.links a {
+  color: var(--link);
+  text-decoration: underline;
+}
+
+button {
+  width: 100%;
+  background-color: var(--secondary);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #431c86;
+}
+
+.right-panel {
+  width: 50%;
+  height: 100vh;
+  background-image: url("image/jungle.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  background-color: #f4f6fa; /* o blanco */
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.fg-image {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Centra horizontal y vertical */
+  width: 60%; /* Ajusta tamaño si lo quieres más pequeño o grande */
+  max-width: 100%;
+  height: 90%;
+  pointer-events: none;
+}
+
+.right-panel img.illustration {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+footer {
+  background-color: #111;
+  color: #ccc;
+  text-align: center;
+  padding: 12px;
+  font-size: 13px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .left-panel,
+  .right-panel {
+    width: 100%;
+    height: auto;
+    padding: 20px;
+  }
+
+  .right-panel img.illustration {
+    height: auto;
+    object-fit: contain;
+  }
+
+  html, body {
+    overflow: auto;
+  }
+}
