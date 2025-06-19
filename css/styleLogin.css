@@ -154,12 +154,12 @@ button:hover {
 
 .fg-image {
   position: absolute;
-  top: 65%;
+  top: 60%;
   left: 50%;
   transform: translate(-50%, -50%); /* Centra horizontal y vertical */
-  width: 45%; /* Ajusta tamaño si lo quieres más pequeño o grande */
+  width: 60%; /* Ajusta tamaño si lo quieres más pequeño o grande */
   max-width: 100%;
-  height: 70%;
+  height: 90%;
   pointer-events: none;
 }
 
