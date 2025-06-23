@@ -1,0 +1,94 @@
+
+    body {
+      background-color: #d2bdf4;
+    }
+
+    .header {
+      height: 50px;
+      background-color: #044da2;
+    }
+
+    .profile-container {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .avatar-img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid rgb(0, 0, 0);
+    }
+
+.popup {
+  position: absolute;
+  top: 20px;
+  left: 30%;
+  transform: translateX(-50%);
+  background-color: white;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  z-index: 100;
+}
+
+
+    .avatar-option {
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    .locked {
+      width: 50px;
+      height: 50px;
+      background-color: #e0e0e0;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.2rem;
+      color: #666;
+    }
+
+    .popup-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    #avatarPopup {
+      display: none;
+    }
+
+    .toggle-btn {
+      font-size: 14px;
+      background: transparent;
+      color: #000;
+      position: absolute;
+      top: 45px;
+      right: 58%;
+      transform: translateX(50%);
+      border-radius: 25px;
+    }
+
+    .avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 columnas */
+  gap: 10px;
+  justify-items: center;
+}
+
+.avatar-option,
+.locked {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  object-fit: cover;
+  cursor: pointer;
+}
