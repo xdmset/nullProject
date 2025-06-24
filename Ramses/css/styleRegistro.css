@@ -1,11 +1,12 @@
 body {
   margin: 0;
   font-family: 'Fredoka', sans-serif;
-  background-color: #0071ce;
   color: white;
-  background-image: url("../image/fondo.png");
+  background: url("../image/fondo.png") no-repeat center center fixed;
+  background-size: cover;
   overflow: visible;
 }
+
 
 header {
   background-color: #41279b;
