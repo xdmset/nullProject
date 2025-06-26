@@ -3,6 +3,8 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+
 }
 
 body {
@@ -18,7 +20,7 @@ body {
 
 /* ===== HEADER ===== */
 header {
-  background-color: #2166ae;
+  background-color: #41279b;
   width: 100%;
   padding: 10px 20px;
   display: flex;
@@ -67,7 +69,7 @@ header {
 .progress {
   height: 100%;
   width: 0%;
-  background-color: #4a30b6;
+  background-color: #3c10eb;
   border-radius: 4px;
   transition: width 0.5s ease-in-out; /* ESTA LÍNEA ES IMPORTANTE */
 }
