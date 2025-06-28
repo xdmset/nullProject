@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro - Paso final</title>
+  <link rel="stylesheet" href="css/styleRegistro.css">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="image/SiglingusLogo.png" alt="Signlingus logo" />
+      <div class="text-logo">
+        <h1>SIGNLINGUS</h1>
+        <p>Para oídos callados... manos parlantes</p>
+      </div>
+    </div>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <span>|</span>
+      <a href="#">Videos</a>
+      <span>|</span>
+      <a href="#">Sobre nosotros</a>
+      <span>|</span>
+      <a href="#">Contacto</a>
+    </nav>
+    <div class="buttons">
+      <button class="register" href="index.html">¡Regístrate!</button>
+      <button class="login">Iniciar sesión</button>
+    </div>
+  </header>
+
+  <main>
+    <h2>¡Ya casi!</h2>
+    <form class="registro-form final">
+      <div class="form-group">
+        <label>* Correo electrónico:</label>
+        <input type="email" placeholder="tucorreo@gmail.com" required>
+      </div>
+
+      <div class="form-group">
+        <label>Número telefónico:</label>
+        <input type="tel" placeholder="XXX-XXX-XXXX">
+      </div>
+
+      <div class="form-group password-group">
+        <label>* Contraseña:</label>
+        <div class="password-wrapper">
+          <input type="password" id="password" placeholder="******" required>
+          
+        </div>
+      </div>
+
+      <form action="?" method="POST">
+      <div class="g-recaptcha" data-sitekey="6LfGN2orAAAAALeqYqUtXGvkW7tHcd8UvX1qSfLw"></div>
+      <br/>
+        </form>
+
+      <button type="submit" class="submit-btn">Registrar</button>
+    </form>
+    <p class="note">* Los campos son <strong>obligatorios</strong></p>
+    <img src="image/monkeyhangingintree2.png" class="corner-img" alt="" />
+  </main>
+
+  <footer>
+    
+  </footer>
+
+  <script>
+    function togglePassword() {
+      const input = document.getElementById("password");
+      input.type = input.type === "password" ? "text" : "password";
+    }
+  </script>
+</body>
+</html>
