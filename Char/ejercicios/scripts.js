@@ -125,10 +125,15 @@ function playCelebrationFanfare() {
   }, 900);
 }
 
-// Función para mostrar barra de notificación
+// Función mejorada para mostrar barra de notificación
 function showNotificationBar(message, type = 'success', duration = 3000) {
   // Reproducir sonido
   playNotificationSound(type);
+  
+  // OCULTAR el botón comprobar cuando aparece la notificación
+  if (checkBtn) {
+    checkBtn.style.display = 'none';
+  }
   
   // Remover barra existente si hay una
   const existingAlert = document.getElementById('notificationBar');
@@ -159,8 +164,23 @@ function showNotificationBar(message, type = 'success', duration = 3000) {
     if (alert) {
       const bsAlert = new bootstrap.Alert(alert);
       bsAlert.close();
+      
+      // MOSTRAR nuevamente el botón comprobar cuando se quita la notificación
+      if (checkBtn) {
+        checkBtn.style.display = 'block';
+      }
     }
   }, duration);
+  
+  // También mostrar el botón si el usuario cierra manualmente la notificación
+  const alertElement = document.getElementById('notificationBar');
+  if (alertElement) {
+    alertElement.addEventListener('closed.bs.alert', () => {
+      if (checkBtn) {
+        checkBtn.style.display = 'block';
+      }
+    });
+  }
 }
 
 function getIcon(type) {
@@ -184,30 +204,106 @@ function showModal(title, message, type = 'info', showReloadBtn = false) {
     existingModal.remove();
   }
 
-  const modalHTML = `
-    <div class="modal fade" id="gameModal" tabindex="-1" aria-labelledby="gameModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header ${getHeaderClass(type)}">
-            <h5 class="modal-title text-white" id="gameModalLabel">
-              ${getIcon(type)} ${title}
-            </h5>
-          </div>
-          <div class="modal-body text-center">
-            <p class="mb-0">${message}</p>
-          </div>
-          <div class="modal-footer justify-content-center">
-            ${showReloadBtn ? 
-              `<button type="button" class="btn btn-primary" id="reloadBtn">Intentar de nuevo</button>` :
-              `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>`
-            }
+  // Modal especial para completado
+  if (type === 'complete') {
+    const modalHTML = `
+      <div class="modal fade" id="gameModal" tabindex="-1" aria-labelledby="gameModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content" style="border: none; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+            <!-- Header colorido con gradiente -->
+            <div class="modal-header" style="background: linear-gradient(135deg, #ff6b6b, #ffd93d, #6bcf7f, #4dabf7); padding: 30px 20px; border: none;">
+              <div class="w-100 text-center">
+                <div style="font-size: 4rem; margin-bottom: 10px;">🎉</div>
+                <h3 class="modal-title text-white mb-0" style="font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+                  ¡SÚPER BIEN!
+                </h3>
+              </div>
+            </div>
+            
+            <!-- Cuerpo del modal -->
+            <div class="modal-body text-center" style="padding: 40px 30px; background: linear-gradient(to bottom, #f8f9ff, #e8f4fd);">
+              <!-- Estrellas animadas -->
+              <div style="font-size: 2.5rem; margin-bottom: 20px; animation: bounce 1s infinite alternate;">
+                ⭐ ⭐ ⭐
+              </div>
+              
+              <!-- Mensaje principal -->
+              <h4 style="color: #2d3436; font-weight: bold; margin-bottom: 15px;">
+                ¡Completaste la lección!
+              </h4>
+              
+              <!-- Mensaje secundario más infantil -->
+              <p style="color: #636e72; font-size: 1.1rem; margin-bottom: 25px; line-height: 1.5;">
+                ¡Eres increíble aprendiendo lenguaje de señas! 🤟<br>
+                <span style="color: #00b894; font-weight: bold;">¡Sigue así, campeón!</span>
+              </p>
+              
+              <!-- Personaje celebrando -->
+              <div style="font-size: 3rem; margin: 20px 0;">
+                🙌
+              </div>
+            </div>
+            
+            <!-- Footer con botón colorido -->
+            <div class="modal-footer justify-content-center" style="background: white; padding: 25px; border: none;">
+              <button type="button" class="btn" data-bs-dismiss="modal" 
+                      style="background: linear-gradient(45deg, #ff6b6b, #ffd93d); 
+                             border: none; 
+                             padding: 12px 30px; 
+                             border-radius: 25px; 
+                             color: white; 
+                             font-weight: bold; 
+                             font-size: 1.1rem;
+                             box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+                             transition: transform 0.2s ease;">
+                ¡Genial! 🎈
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  `;
-
-  document.body.insertAdjacentHTML('beforeend', modalHTML);
+      
+      <!-- Estilos para animaciones -->
+      <style>
+        @keyframes bounce {
+          0% { transform: translateY(0px); }
+          100% { transform: translateY(-10px); }
+        }
+        
+        .btn:hover {
+          transform: translateY(-2px) !important;
+        }
+      </style>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+  } else {
+    // Modal normal para otros casos
+    const modalHTML = `
+      <div class="modal fade" id="gameModal" tabindex="-1" aria-labelledby="gameModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header ${getHeaderClass(type)}">
+              <h5 class="modal-title text-white" id="gameModalLabel">
+                ${getIcon(type)} ${title}
+              </h5>
+            </div>
+            <div class="modal-body text-center">
+              <p class="mb-0">${message}</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+              ${showReloadBtn ? 
+                `<button type="button" class="btn btn-primary" id="reloadBtn">Intentar de nuevo</button>` :
+                `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>`
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+  }
   
   const modal = new bootstrap.Modal(document.getElementById('gameModal'));
   modal.show();
