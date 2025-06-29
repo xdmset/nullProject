@@ -1,110 +1,289 @@
+:root {
+  --primary-color: #1e57a0;
+  --secondary-color: #d4baf5;
+  --accent-color: #ff6b6b;
+  --text-color: #2c3e50;
+  --light-text: #f8f9fa;
+  --sidebar-bg: #ffffff;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #d4baf5;
-  }
-  
-  header {
-    background-color: #1e57a0;
-    color: white;
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
-  #menu-toggle {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-  }
-  
-aside {
-  background-color: #f0f4fa;
-  width: 200px;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+header {
+  background-color: var(--primary-color);
+  color: var(--light-text);
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   position: fixed;
-  top: 0; /* Cambiado de 50px a 0 */
+  width: 100%;
+  top: 0;
+  z-index: 5;
+  box-shadow: var(--shadow);
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.project-logo {
+  height: 40px;
+  width: auto;
+  margin-right: 15px;
+  border-radius: 4px;
+}
+
+.header-placeholder {
+  width: 40px;
+  visibility: hidden;
+}
+
+#menu-toggle {
+  background: none;
+  border: none;
+  color: var(--light-text);
+  font-size: 24px;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+#menu-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+aside {
+  background-color: var(--sidebar-bg);
+  width: 280px;
+  position: fixed;
+  top: 0;
   left: 0;
-  height: 100vh; /* Ocupa toda la altura visible */
+  height: 100vh;
   padding: 20px;
-  padding-top: 70px; /* Espacio para el header */
+  padding-top: 80px;
   transition: transform 0.3s ease-in-out;
   transform: translateX(-100%);
-  box-shadow: 2px 0 5px rgba(0,0,0,0.2);
-  z-index: 10; /* Asegura que esté sobre el contenido */
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
 }
-  
-  aside nav h2 {
-    font-size: 16px;
-    margin-bottom: 10px;
-  }
-  
-  aside nav ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  aside nav ul li {
-    margin: 10px 0;
-  }
-  
-  aside nav ul li a {
-    text-decoration: none;
-    color: #000;
-    font-size: 16px;
-  }
-  
-  aside .home-link {
-    display: block;
-    margin-top: 20px;
-    text-decoration: none;
-    font-size: 18px;
-  }
-  
-  aside.show {
-    transform: translateX(0);
-  }
-  
-  main {
-    margin-left: 0;
-    padding: 20px;
-    text-align: center;
-  }
-  
-  .video-container {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-  }
-  
-  .hidden {
-    display: none;
-  }  
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.sidebar-header h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+aside nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+aside nav ul li {
+  margin: 8px 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+aside nav ul li a {
+  text-decoration: none;
+  color: var(--text-color);
+  font-size: 1rem;
+  padding: 12px 15px;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+aside nav ul li a i {
+  margin-right: 12px;
+  width: 20px;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+aside nav ul li a:hover {
+  background-color: #f0f4fa;
+  color: var(--primary-color);
+}
+
+aside nav ul li a.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.home-link {
+  display: flex;
+  align-items: center;
+  margin-top: auto;
+  padding: 12px 15px;
+  text-decoration: none;
+  color: var(--text-color);
+  font-size: 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.home-link i {
+  margin-right: 12px;
+}
+
+.home-link:hover {
+  background-color: #f0f4fa;
+  color: var(--primary-color);
+}
+
+.sidebar-footer {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+  font-size: 0.8rem;
+  color: #666;
+  text-align: center;
+}
+
+aside.show {
+  transform: translateX(0);
+}
+
+main {
+  margin-top: 70px;
+  padding: 25px;
+  text-align: center;
+}
+
+.content-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  background-color: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+
+h2 {
+  color: var(--primary-color);
+  margin-bottom: 10px;
+  font-size: 1.8rem;
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 25px;
+  font-size: 1rem;
+}
+
+.video-container {
+  margin: 30px 0;
+  position: relative;
+  padding-bottom: 50%;
+  height: 0;
+  overflow: hidden;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+
+.video-info {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  text-align: left;
+}
 
 .close-btn {
-  position: absolute;
-  right: 15px;
-  top: 15px;
-  background: rgba(0,0,0,0.1);
+  background: var(--primary-color);
   border: none;
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  font-size: 18px;
+  font-size: 14px;
   cursor: pointer;
   color: white;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .close-btn:hover {
-  background: rgba(0,0,0,0.2);
+  background: #15427c;
+  transform: scale(1.1);
 }
 
-aside nav {
-  margin-top: 20px;
+@media (max-width: 768px) {
+  .video-container {
+    padding-bottom: 56.25%;
+  }
+  
+  .project-logo {
+    height: 35px;
+    margin-right: 10px;
+  }
+  
+  h1 {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .project-logo {
+    height: 30px;
+    margin-right: 8px;
+  }
+  
+  h1 {
+    font-size: 1.1rem;
+  }
+  
+  .content-container {
+    padding: 25px;
+  }
 }
