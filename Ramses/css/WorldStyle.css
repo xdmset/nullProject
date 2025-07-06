@@ -1,0 +1,202 @@
+/* ======= GENERAL ======= */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #E9ECEF;
+}
+
+/* ======= HEADER ======= */
+.header {
+  background-color: #005BA2;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 30px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.header .left-section i {
+  font-size: 24px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.header .center-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header .center-section img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: white;
+  padding: 4px;
+}
+
+.header .center-section div {
+  line-height: 1.2;
+}
+
+.username {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.header .right-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.logo-icon {
+  width: 50px;
+  height: 50px;
+  padding-bottom: 3px;
+}
+
+/* ======= SIDEBAR ======= */
+.sidebar {
+  position: absolute;
+  top: 100px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.tag-button-Videos,
+.tag-button-Information {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 25px;
+  width: 260px;
+  background-color: #4B8CC5;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px 0 0 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+  clip-path: polygon(0 0, 92% 0, 100% 50%, 92% 100%, 0 100%);
+  height: 70px;
+}
+
+.tag-button-Videos i,
+.tag-button-Information i {
+  font-size: 18px;
+}
+
+.tag-button-Videos:hover,
+.tag-button-Information:hover {
+  background-color: #3a6fa3;
+  transform: translateX(4px);
+}
+
+/* ======= MAPA ======= */
+.map-image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -45%);
+  width: 850px;
+  max-width: 150vw;
+  height: auto;
+  z-index: 1;
+}
+
+/* ======= PIN DE MAPA ESTILO GOOGLE 📍 ======= */
+.map-wrapper {
+  position: relative;
+  width: 850px;
+  max-width: 90vw;
+  margin: 0 auto;
+  top: 400px;
+} 
+
+.map-pin {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border: 3px solid #1f2020;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  z-index: 20;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.map-pin .pin-content {
+  transform: rotate(45deg);
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.map-pin .pin-content img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+/* === Posiciones individuales (ajusta a tu gusto) === */
+/* === PLAYA === */
+.marker-playa {
+  background-color: #FFB84C;
+  bottom: 100px;
+  left: 25%;
+}
+.marker-playa:hover {
+  transform: scale(1.15) rotate(-45deg);
+  box-shadow: 0 0 15px 4px #FFB84Caa;
+}
+
+/* === CIUDAD === */
+.marker-ciudad {
+  background-color: #6C757D;
+  top: 180px;
+  left: 25%;
+}
+.marker-ciudad:hover {
+  transform: scale(1.15) rotate(-45deg);
+  box-shadow: 0 0 15px 4px #6C757Daa;
+}
+
+/* === JUNGLA === */
+.marker-jungla {
+  background-color: #1FAB89;
+  top: 140px;
+  left: 70%;
+}
+.marker-jungla:hover {
+  transform: scale(1.15) rotate(-45deg);
+  box-shadow: 0 0 15px 4px #1FAB89aa;
+}
+
+/* === CASTILLO === */
+.marker-castillo {
+  background-color: #e9202a;
+  bottom: 85px;
+  left: 74%;
+}
+.marker-castillo:hover {
+  transform: scale(1.15) rotate(-45deg);
+  box-shadow: 0 0 15px 4px #e9202a;
+}
