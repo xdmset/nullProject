@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 
 // --- Assets ---
 // Asegúrate de que las rutas a tus imágenes sean correctas en la carpeta /src/assets/
-import logo from "../assets/logo.png";
+import Logo from "../assets/Logo.png";
+
 import illustration from "../assets/login-illustration.svg";
 import googleIcon from "../assets/google-icon.png";
 import twitterIcon from "../assets/twitter-icon.png";
@@ -46,7 +47,7 @@ export default function LoginPage({ onLogin, navigate }) {
                 <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
                     <div className="flex justify-center">
                         <a href="#" onClick={(e) => {e.preventDefault(); navigate('home')}}>
-                            <img src={logo} className="h-12" alt="Logo Signlingus" />
+                            <img src={Logo} className="h-12" alt="Logo Signlingus" />
                         </a>
                     </div>
                     <div className="mt-12 flex flex-col items-center">
@@ -107,3 +108,4 @@ export default function LoginPage({ onLogin, navigate }) {
         </div>
     );
 };
+
