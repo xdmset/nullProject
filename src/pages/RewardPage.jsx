@@ -2,7 +2,7 @@ import React from 'react';
 
 // --- Assets ---
 // Asegúrate de que las rutas a tus imágenes sean correctas en la carpeta /src/assets/
-import logo from '../assets/logo.png';
+import Logo from "../assets/Logo.png";
 import changoBombero from '../assets/changobombero.jpg';
 import changoMago from '../assets/changomago.jpg';
 import cofre from '../assets/cofre.jpg';
@@ -17,7 +17,7 @@ export default function RewardPage({ navigate }) {
       {/* Header (simplificado para esta pantalla) */}
       <header className="bg-[#41279b] py-4 px-8 flex items-center justify-center text-white w-full">
         <div className="flex items-center">
-          <img src={logo} alt="Signlingus logo" className="h-[50px] mr-4" />
+          <img src={Logo} alt="Signlingus logo" className="h-[50px] mr-4" />
           <div>
             <h1 className="text-2xl font-bold">SIGNLINGUS</h1>
             <p className="text-sm">Para oídos callados... manos parlantes</p>

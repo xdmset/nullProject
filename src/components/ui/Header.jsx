@@ -1,6 +1,6 @@
 import React from 'react';
 // Asegúrate de tener tu logo y un avatar de ejemplo en la carpeta assets
-import logoSignlingus from '../assets/logo.png'; 
+import logoSignlingus from '../assets/Logo.png'; 
 import avatar from '../assets/changomago.jpg'; 
 
 const Header = () => {

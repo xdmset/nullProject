@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import useAnimatedNavToggler from "../../hooks/useAnimatedNavToggler.jsx";
-import logo from "../../assets/logo.png";
+import Logo from "../../assets/Logo.png";
 
 // --- Iconos en formato de componente React ---
 const MenuIcon = () => (
@@ -31,7 +31,7 @@ export default function LandingHeader({ navigate }) {
 
   const LogoLink = () => (
     <a href="#" onClick={(e) => { e.preventDefault(); navigate('home'); }} className="flex items-center font-black text-gray-800">
-      <img src={logo} alt="logo" className="w-10 mr-3" />
+      <img src={Logo} alt="logo" className="w-10 mr-3" />
       <div className="flex flex-col leading-none">
         <span className="text-2xl font-black">SIGNLINGUS</span>
         <span className="text-sm font-normal text-gray-600">Para oídos callados... manos parlantes</span>
