@@ -7,7 +7,7 @@ from rest_framework.routers import DefaultRouter
 from lessons.views import MundoViewSet, CategoriaViewSet, MaterialDidacticoViewSet
 from rewards.views import RecompensaViewSet, ProgresoViewSet
 from users.views import UsuarioViewSet, RolViewSet, LogroViewSet
-
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 # 2. Crea UN SOLO router para toda la API
 router = DefaultRouter()
 

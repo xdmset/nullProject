@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-1zcx70su!clp2n(n5+01!cp38$cfiifcpjpy!qf(zmyz1sxyr+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['18.119.113.144']
 
 
 # Application definition
@@ -38,8 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-     # Apps de Terceros (como REST Framework)
-    'rest_framework',
 
     # Mis Apps (aquí las registras)
     'users',
@@ -92,8 +90,8 @@ WSGI_APPLICATION = 'signlingo_backend.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "signlingus",
-        "USER": "postgres",
+        "NAME": "signlingo_db",
+        "USER": "signuser",
         "PASSWORD": "240525",
         "HOST": "127.0.0.1",
         "PORT": "5432",
