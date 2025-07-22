@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import useAnimatedNavToggler from "../../hooks/useAnimatedNavToggler.jsx";
-import Logo from "../../assets/Logo.png";
+import logo from "../../assets/logo.png";
 
 // --- Iconos en formato de componente React ---
 const MenuIcon = () => (
@@ -31,74 +31,74 @@ export default function LandingHeader({ navigate }) {
 
   const LogoLink = () => (
     <a href="#" onClick={(e) => { e.preventDefault(); navigate('home'); }} className="flex items-center font-black text-gray-800">
-      <img src={Logo} alt="logo" className="w-10 mr-3" />
+      <img src={logo} alt="logo" className="w-10 mr-3" />
       <div className="flex flex-col leading-none">
         <span className="text-2xl font-black">SIGNLINGUS</span>
-        <span className="text-sm font-normal text-gray-600">Para oídos callados... manos parlantes</span>
+        <span className="text-sm font-normal text-white-600">Para oídos callados... manos parlantes</span>
       </div>
     </a>
   );
 
-  return (
-    <header className="flex justify-between items-center max-w-screen-xl mx-auto py-6 px-4 md:px-8">
-      
-      {/* --- Menú para Escritorio (Desktop) --- */}
-      <nav className="hidden lg:flex flex-1 justify-between items-center">
-        <LogoLink />
-        <div className="flex items-center space-x-8">
-          {navLinks.map((link, index) => (
-            <a 
-              key={index} 
-              href="#" 
-              onClick={(e) => { e.preventDefault(); link.action(); }} 
-              className={`
-                text-lg my-2 lg:text-sm lg:mx-6 lg:my-0 font-semibold tracking-wide transition duration-300 pb-1 border-b-2
-                ${link.isPrimary 
-                  // --- ¡CAMBIO CLAVE AQUÍ! ---
-                  // Cambiamos 'rounded-full' por 'rounded-lg' para un estilo más rectangular.
-                  ? 'px-8 py-3 rounded-lg bg-primary-500 text-gray-100 hover:bg-primary-700 focus:shadow-outline border-b-0' 
-                  : 'border-transparent text-gray-600 hover:border-primary-500 hover:text-primary-500'}
-                ${link.isSecondary ? 'lg:ml-12' : ''}
-              `}
-            >
-              {link.text}
-            </a>
-          ))}
-        </div>
-      </nav>
-
-      {/* --- Menú para Móviles (Mobile) --- */}
-      <nav className="lg:hidden flex flex-1 items-center justify-between">
-        <LogoLink />
-        <button 
-          onClick={toggleNavbar} 
-          className="z-20 focus:outline-none hover:text-primary-500 transition duration-300"
-        >
-          {showNavLinks ? <CloseIcon /> : <MenuIcon />}
-        </button>
-        <motion.div 
-          initial={{ x: "150%", display: "none" }}
-          animate={animation}
-          className="z-10 fixed top-0 inset-x-0 mx-4 my-6 p-8 border text-center rounded-lg text-gray-900 bg-white shadow-lg"
-        >
-          <div className="flex flex-col items-center space-y-6">
+return (
+  <div className="relative bg-primary-500 text-gray-100 w-full px-6 py-6 sm:py-8 overflow-hidden">
+    <div className="max-w-screen-xl mx-auto relative z-5">
+      <header className="flex justify-between items-center w-full">
+        {/* Menú de escritorio */}
+        <nav className="hidden lg:flex flex-1 justify-between items-center">
+          <LogoLink />
+          <div className="flex items-center space-x-8">
             {navLinks.map((link, index) => (
-              <a 
-                key={index} 
-                href="#" 
+              <a
+                key={index}
+                href="#"
                 onClick={(e) => { e.preventDefault(); link.action(); }}
                 className={`
-                  text-lg font-semibold tracking-wide
-                  ${link.isPrimary ? 'w-full text-center px-8 py-3 rounded-lg bg-primary-500 text-gray-100 hover:bg-primary-700' : ''}
+                  text-lg my-2 lg:text-sm lg:mx-6 lg:my-0 font-semibold tracking-wide transition duration-300 pb-1 border-b-2
+                  ${link.isPrimary
+                    ? 'flex items-center justify-center px-6 py-2 rounded-lg bg-white text-primary-500 hover:bg-gray-100 border-b-0'
+                    : 'flex items-center border-transparent text-gray-100 hover:border-white hover:text-white'}
+                  ${link.isSecondary ? 'lg:ml-12' : ''}
                 `}
               >
                 {link.text}
               </a>
             ))}
           </div>
-        </motion.div>
-      </nav>
+        </nav>
 
-    </header>
-  );
-};
+        {/* Menú móvil */}
+        <nav className="lg:hidden flex flex-1 items-center justify-between">
+          <LogoLink />
+          <button
+            onClick={toggleNavbar}
+            className="z-20 focus:outline-none hover:text-white transition duration-300"
+          >
+            {showNavLinks ? <CloseIcon /> : <MenuIcon />}
+          </button>
+          <motion.div
+            initial={{ x: "150%", display: "none" }}
+            animate={animation}
+            className="z-10 fixed top-0 inset-x-0 mx-4 my-6 p-8 border text-center rounded-lg text-gray-900 bg-white shadow-lg"
+          >
+            <div className="flex flex-col items-center space-y-6">
+              {navLinks.map((link, index) => (
+                <a
+                  key={index}
+                  href="#"
+                  onClick={(e) => { e.preventDefault(); link.action(); }}
+                  className={`
+                    text-lg font-semibold tracking-wide
+                    ${link.isPrimary ? 'w-full text-center px-8 py-3 rounded-lg bg-primary-500 text-gray-100 hover:bg-primary-700' : ''}
+                  `}
+                >
+                  {link.text}
+                </a>
+              ))}
+            </div>
+          </motion.div>
+        </nav>
+      </header>
+    </div>
+  </div>
+);
+}

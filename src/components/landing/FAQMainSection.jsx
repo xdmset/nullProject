@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-
+import FAQ from "../../assets/pagina/faq.png";
 // --- Assets ---
 // Usaremos una imagen de placeholder como en el original. Puedes cambiarla por una de tu carpeta de assets.
-const faqImageSrc = "https://images.unsplash.com/photo-1579427421635-a0015b804b2e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1024&q=80";
+const faqImageSrc = FAQ
 
 // --- Iconos en formato de componente React ---
 const PlusIcon = () => (
@@ -21,7 +21,7 @@ const MinusIcon = () => (
 export default function FAQMainSection() {
     const [activeQuestionIndex, setActiveQuestionIndex] = useState(null);
 
-    const heading = <>Algunas <span className="text-blue-500">preguntas ?</span></>;
+    const heading = <>Algunas <span className="text-primary-500">preguntas ?</span></>;
     const description = "Voces que inspiran y muestran cómo la Lengua de Señas Mexicano transforma vidas y fomenta la inclusión.";
     const faqs = [
         {
@@ -55,13 +55,11 @@ export default function FAQMainSection() {
             <div className="max-w-screen-xl mx-auto py-16 lg:py-20">
                 <div className="flex">
                     {/* Columna de la Imagen */}
-                    <div className="hidden lg:block w-5/12 flex-shrink-0">
-                        <div 
-                            className="rounded h-[36rem] bg-center bg-cover shadow-lg" // h-144
-                            style={{ backgroundImage: `url("${faqImageSrc}")` }}
-                        ></div>
+                    <div className="hidden lg:flex w-5/12 flex-shrink-0 items-center justify-center">
+                        <div className="h-full max-h-[36rem] w-full overflow-hidden rounded shadow-md">
+                            <img src={FAQ} alt="Faq" className="w-full h-full object-cover rounded border shadow-lg"/>
+                        </div>
                     </div>
-
                     {/* Columna del Contenido de FAQ */}
                     <div className="w-full lg:w-7/12 lg:ml-12">
                         <h2 className="text-3xl sm:text-4xl font-black lg:text-left">{heading}</h2>
@@ -76,7 +74,7 @@ export default function FAQMainSection() {
                                 >
                                     <dt className="flex justify-between items-center">
                                         <span className="text-lg lg:text-xl font-semibold">{faq.question}</span>
-                                        <span className="ml-2 bg-blue-500 text-gray-100 p-1 rounded-full group-hover:bg-blue-700 group-hover:text-gray-200 transition duration-300">
+                                        <span className="ml-2 bg-primary-500 text-gray-100 p-1 rounded-full group-hover:bg-blue-700 group-hover:text-gray-200 transition duration-300">
                                             {activeQuestionIndex === index ? <MinusIcon /> : <PlusIcon />}
                                         </span>
                                     </dt>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 // --- Assets ---
 import playaBackground from "../../assets/playa.png";
-import logoSignlingus from '../../assets/Logo.png'; 
+import logoSignlingus from '../../assets/logo.png'; 
 import avatarUsuario from '../../assets/changomago.jpg'; 
 
 // --- Componentes del Juego ---

@@ -9,9 +9,11 @@ export default {
       // --- Paleta de colores personalizada ---
       colors: {
         primary: {
-          500: '#6366F1', // Morado/índigo vibrante para botones y highlights
-          700: '#4F46E5', // Versión más oscura para el hover
-          900: '#312E81', // Morado muy oscuro para fondos de sección
+          200: '#f8f2ff',
+          300: '#7DF9FF', // Azulado vibrante para iconos
+          500: '#412DB2', // Morado para botones y highlights
+          700: '#005EB8', // Azul fuerte para fondos
+          900: '#229FA9', // Verde para iconos
         },
       },
 

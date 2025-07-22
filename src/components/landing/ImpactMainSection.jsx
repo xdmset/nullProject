@@ -24,7 +24,7 @@ export default function ImpactMainSection() {
 
     return (
         // Usamos clases de Tailwind directamente. Asumimos que 'bg-primary-900' es un azul oscuro.
-        <div className="my-8 lg:my-10 bg-blue-900 text-gray-100 -mx-8 px-8">
+        <div className="my-8 lg:my-10 bg-primary-500 text-gray-100 -mx-8 px-8">
             <div className="max-w-screen-xl mx-auto py-16 lg:py-20">
                 {/* Contenedor del Encabezado */}
                 <div>

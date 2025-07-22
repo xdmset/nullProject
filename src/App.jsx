@@ -5,6 +5,7 @@ import MainPage from './pages/MainPage.jsx';
 import AboutPage from './pages/about/AboutPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import SignupPage from './pages/SignupPage.jsx';
+import PasswordPage from './pages/PasswordPage.jsx';
 import RewardPage from './pages/RewardPage.jsx';
 import AdminLayout from './components/admin/AdminLayout.jsx';
 import Mundos from './components/game/Mundos.jsx';
@@ -42,6 +43,8 @@ function App() {
         return <LoginPage onLogin={handleLogin} navigate={navigate} />;
       case 'signup':
         return <SignupPage navigate={navigate} />;
+      case 'password':
+        return <PasswordPage navigate={navigate} />;
       case 'about':
         return <AboutPage navigate={navigate} />;
       

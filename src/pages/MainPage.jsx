@@ -16,7 +16,8 @@ import TestimonyMainSection from '../components/landing/TestimonyMainSection.jsx
 import FAQMainSection from '../components/landing/FAQMainSection.jsx';
 
 // Helper component to pass props, just like in the original file
-const HighlightedText = ({ children }) => <span className="text-blue-500">{children}</span>;
+const HighlightedText = ({ children }) => <div className="text-primary-500">{children}</div>;
+
 
 export default function MainPage({ navigate }) {
   return (
@@ -24,18 +25,10 @@ export default function MainPage({ navigate }) {
       <LandingHeader navigate={navigate} />
       <StartMainSection navigate={navigate} />
       <ImpactMainSection />
-      <ValuesMainSection 
-        heading={<>Valores <HighlightedText>del Proyecto</HighlightedText></>}
-      />
-      <PopularMainSection
-        heading={<>Secciones <HighlightedText>populares</HighlightedText></>}
-      />
-      <TestimonyMainSection 
-        heading={<>Lo que dicen <HighlightedText>nuestros usuarios</HighlightedText></>}
-      />
-      <FAQMainSection
-        heading={<>Algunas <HighlightedText>preguntas ?</HighlightedText></>}
-      />
+      <ValuesMainSection  />
+      <PopularMainSection/>
+      <TestimonyMainSection />
+      <FAQMainSection/>
       <LandingFooter />
     </AnimationRevealPage>
   );

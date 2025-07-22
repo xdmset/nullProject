@@ -1,5 +1,14 @@
 import React, { useState } from "react";
 import Slider from "react-slick";
+import Avatar from "../../assets/avatars/avatar1.png"
+import Avatar1 from "../../assets/avatars/avatar2.png"
+import Avatar2 from "../../assets/avatars/avatar3.png"
+import Avatar3 from "../../assets/avatars/avatar4.png"
+import Avatar4 from "../../assets/avatars/avatar5.png"
+import Avatar5 from "../../assets/avatars/avatar6.png"
+import Avatar6 from "../../assets/avatars/avatar7.png"
+import Avatar7 from "../../assets/avatars/avatar8.png"
+
 
 // --- ¡CAMBIO CLAVE AQUÍ! ---
 // Importamos los estilos necesarios para el carrusel
@@ -7,7 +16,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 // --- Assets ---
-import loveIllustrationImage from "../../assets/love-illustration.svg";
+import loveIllustrationImage from "../../assets/pagina/Testimonio.png";
 
 // --- Iconos ---
 const StarIcon = () => (
@@ -29,12 +38,12 @@ const ArrowRightIcon = () => (
 export default function TestimonyMainSection() {
     const [sliderRef, setSliderRef] = useState(null);
 
-    const heading = <>Lo que dicen <span className="text-blue-500">nuestros usuarios</span></>;
+    const heading = <>Lo que dicen <span className="text-primary-500">nuestros usuarios</span></>;
     const description = "Experiencias reales que reflejan el impacto positivo de aprender y enseñar la Lengua de Señas Mexicano.";
     const testimonials = [
         {
             stars: 5,
-            profileImageSrc: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3.25&w=512&h=512&q=80",
+            profileImageSrc: Avatar,
             heading: "Una experiencia educativa inolvidable",
             quote: "Cada persona que aprende la lengua de señas contribuye a un mundo más inclusivo y justo.",
             customerName: "Mariana G.",
@@ -42,13 +51,62 @@ export default function TestimonyMainSection() {
         },
         {
             stars: 5,
-            profileImageSrc: "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=512&h=512&q=80",
+            profileImageSrc: Avatar1,
             heading: "Diseño y desarrollo que marcan la diferencia",
             quote: "La lengua de señas es el lenguaje que une más allá de las palabras, conecta a través de los gestos.",
             customerName: "Alejandro T.",
             customerTitle: "Fundadora, EventsNYC"
+        },
+        {
+            stars: 5,
+            profileImageSrc: Avatar2,
+            heading: "Tecnología al servicio de la inclusión",
+            quote: "La tecnología no reemplaza la lengua de señas, solo amplifica su alcance y visibilidad.",
+            customerName: "Manuel M.",
+            customerTitle: "Director General, Delos Inc."
+        },
+        {
+            stars: 5,
+            profileImageSrc: Avatar3,
+            heading: "Comunicación que toca el alma",
+            quote: "Cuando no escuchas con los oídos, escuchas con el alma, y ahí es donde la lengua de señas cobra vida.",
+            customerName: "Alondra T.",
+            customerTitle: "Fundadora, EventsNYC"
+        },
+        {
+            stars: 5,
+            profileImageSrc: Avatar4,
+            heading: "Un lenguaje visual y lleno de vida",
+            quote: "La lengua de señas no es solo un lenguaje, es una conexión profunda con el mundo visual.",
+            customerName: "Brayan A.",
+            customerTitle: "Director General, Delos Inc."
+        },
+        {
+            stars: 5,
+            profileImageSrc: Avatar5,
+            heading: "Educación inclusiva desde las aulas",
+            quote: "La verdadera inclusión llegará cuando cada escuela enseñe la lengua de señas como parte de su currículo básico.",
+            customerName: "David G.",
+            customerTitle: "Fundadora, EventsNYC"
+        },
+        {
+            stars: 5,
+            profileImageSrc: Avatar6,
+            heading: "Escuchar con el corazón",
+            quote: "Cuando no escuchas con los oídos, escuchas con el alma, y ahí es donde la lengua de señas cobra vida.",
+            customerName: "Alejandra B.",
+            customerTitle: "Director General, Delos Inc."
+        },
+        {
+            stars: 5,
+            profileImageSrc: Avatar7,
+            heading: "Empatía a través del lenguaje",
+            quote: "El aprendizaje de la lengua de señas es una lección en empatía, porque nos permite comunicarnos en un nivel más profundo.",
+            customerName: "Beatriz C.",
+            customerTitle: "Fundadora, EventsNYC"
         }
     ];
+
 
     return (
         <div className="max-w-screen-xl mx-auto py-20 lg:py-24">

@@ -2,11 +2,8 @@ import React, { useState } from 'react';
 
 // --- Assets ---
 // Asegúrate de que las rutas a tus imágenes sean correctas en la carpeta /src/assets/
-import Logo from "../assets/Logo.png";
-
-import illustration from "../assets/login-illustration.svg";
-import googleIcon from "../assets/google-icon.png";
-import twitterIcon from "../assets/twitter-icon.png";
+import logo from "../assets/logo.png";
+import Chango from "../assets/startMain.png";
 
 // --- Icono en formato de componente React ---
 const LoginIcon = () => (
@@ -38,73 +35,83 @@ export default function LoginPage({ onLogin, navigate }) {
         onLogin({ email, role });
     };
 
-    return (
-        // Usamos clases de Tailwind directamente. Asumimos que 'bg-primary-900' es un azul oscuro.
-        <div className="min-h-screen bg-blue-900 text-white font-medium flex justify-center items-center p-4 sm:p-8">
-            <div className="max-w-screen-xl m-0 sm:mx-20 sm:my-16 bg-white text-gray-900 shadow-lg sm:rounded-lg flex justify-center flex-1">
-                
-                {/* Columna Principal del Formulario */}
-                <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
-                    <div className="flex justify-center">
-                        <a href="#" onClick={(e) => {e.preventDefault(); navigate('home')}}>
-                            <img src={Logo} className="h-12" alt="Logo Signlingus" />
-                        </a>
-                    </div>
-                    <div className="mt-12 flex flex-col items-center">
-                        <h1 className="text-2xl xl:text-3xl font-extrabold">SignLingus</h1>
-                        <div className="w-full flex-1 mt-8">
-                            
-                            {/* Formulario de Login */}
-                            <form className="mx-auto max-w-xs" onSubmit={handleSubmit}>
-                                <input 
-                                    className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5 first:mt-0"
-                                    type="email" 
-                                    placeholder="Correo electrónico" 
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    required
-                                />
-                                <input 
-                                    className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                                    type="password" 
-                                    placeholder="Contraseña" 
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    required
-                                />
-                                <button 
-                                    type="submit"
-                                    className="mt-5 tracking-wide font-semibold bg-blue-500 text-gray-100 w-full py-4 rounded-lg hover:bg-blue-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
-                                >
-                                    <LoginIcon />
-                                    <span className="ml-3">Iniciar sesión</span>
-                                </button>
-                            </form>
-                            
-                            <p className="mt-6 text-xs text-gray-600 text-center">
-                                <a href="#" className="border-b border-gray-500 border-dotted">
-                                    ¿Haz olvidado tu contraseña?
-                                </a>
-                            </p>
-                            <p className="mt-8 text-sm text-gray-600 text-center">
-                                Si no tienes cuenta{" "}
-                                <a href="#" onClick={(e) => {e.preventDefault(); navigate('signup')}} className="border-b border-gray-500 border-dotted">
-                                    ¡regístrate aquí!
-                                </a>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                
-                {/* Columna de la Ilustración */}
-                <div className="flex-1 bg-blue-100 text-center hidden lg:flex justify-center items-center sm:rounded-r-lg">
-                    <div 
-                        className="m-12 xl:m-16 w-full max-w-sm bg-contain bg-center bg-no-repeat h-96"
-                        style={{ backgroundImage: `url("${illustration}")` }}
-                    ></div>
-                </div>
+return (
+  <div className="relative min-h-screen flex items-center justify-center p-4">
 
-            </div>
+    {/* Fondo con la imagen difuminada */}
+    <div
+      className="absolute inset-0 bg-cover bg-center filter blur-sm opacity-30 z-0"
+      style={{ backgroundImage: `url("${Chango}")` }}
+    />
+
+    {/* Card del Login */}
+    <div className="w-full max-w-5xl bg-primary-500 rounded-xl shadow-xl flex flex-col lg:flex-row overflow-hidden relative z-10 text-white">
+
+      {/* Columna del formulario */}
+      <div className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center">
+        <div className="text-center mb-6">
+          <img src={logo} alt="Logo Signlingus" className="h-16 mx-auto mb-4" />
+          <h1 className="text-3xl font-bold tracking-wide">SIGNLINGUS</h1>
+          <p className="mt-2 text-sm font-medium">
+            ¡Bienvenid@ a una aventura llena de diversión y conocimiento!
+          </p>
         </div>
-    );
+
+        <form onSubmit={handleSubmit} className="w-full max-w-sm mx-auto text-left">
+          <label className="block text-sm mb-1">Correo:</label>
+          <input 
+            type="email"
+            placeholder="tucorreo@gmail.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="w-full px-4 py-2 rounded-md text-gray-800 bg-white mb-4 focus:outline-none focus:ring-2 focus:ring-blue-300"
+          />
+
+          <label className="block text-sm mb-1">Contraseña:</label>
+          <input 
+            type="password"
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="w-full px-4 py-2 rounded-md text-gray-800 bg-white mb-6 focus:outline-none focus:ring-2 focus:ring-blue-300"
+          />
+
+          <button 
+            type="submit"
+            className="w-full bg-primary-700 hover:bg-primary-700 text-white font-semibold py-2 rounded-md transition duration-200"
+          >
+            Ingresar
+          </button>
+        </form>
+
+        <div className="mt-6 text-center text-sm">
+          <p>
+            Si no tienes una cuenta,{" "}
+            <a onClick={(e) => { e.preventDefault(); navigate('signup'); }} 
+               className="text-blue-200 underline cursor-pointer">
+              ¡regístrate aquí!
+            </a>
+          </p>
+          <p className="mt-1">
+            <a onClick={(e) => { e.preventDefault(); navigate('password'); }} 
+               className="text-blue-200 underline">
+              ¿Haz olvidado tu contraseña?
+            </a>
+          </p>
+        </div>
+      </div>
+
+      {/* Columna de ilustración */}
+      <div 
+        className="hidden lg:block w-full lg:w-1/2 bg-blue-100 bg-cover bg-center"
+        style={{ backgroundImage: `url("${Chango}")` }}
+      />
+    </div>
+  </div>
+);
+
+
+
 };

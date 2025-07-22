@@ -8,7 +8,7 @@ import FamilyImage from "../../assets/family.jpg";
 // --- Componente de la Sección de Secciones Populares ---
 export default function PopularMainSection() {
 
-    const heading = <>Secciones <span className="text-blue-500">populares</span></>;
+    const heading = <>Secciones <span className="text-primary-500">populares</span></>;
     const description = "Aquí hay algunos de las secciones populares del sistema seleccionados por profesionales.";
 
     // --- ¡CAMBIO CLAVE AQUÍ! ---

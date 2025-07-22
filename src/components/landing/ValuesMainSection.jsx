@@ -38,7 +38,7 @@ const SimpleIcon = () => (
 // --- Componente de la Sección de Valores ---
 export default function ValuesMainSection() {
 
-    const heading = <>Valores <span className="text-blue-500">del Proyecto</span></>;
+    const heading = <>Valores <span className="text-primary-500">del Proyecto</span></>;
     const description = "Creamos experiencias educativas únicas que acercan a las personas, promueven el respeto y facilitan el aprendizaje sin barreras.";
     const cards = [
         { Icon: ShieldIcon, title: "Innovación", description: "Desarrollamos soluciones creativas con impacto positivo haciendo el aprendizaje más accesible para todas las personas." },
@@ -61,7 +61,7 @@ export default function ValuesMainSection() {
                 {cards.map((card, i) => (
                     <div key={i} className="md:w-1/2 lg:w-1/3 max-w-sm">
                         <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left h-full mx-4 px-2 py-8">
-                            <div className="border text-center rounded-full p-5 flex-shrink-0 text-blue-500">
+                            <div className="border text-center rounded-full p-5 flex-shrink-0 text-primary-900">
                                 <card.Icon />
                             </div>
                             <div className="sm:ml-4 mt-4 sm:mt-2">
