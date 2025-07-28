@@ -1,77 +1,130 @@
 import React, { useState } from 'react';
 
+// Importamos React Router DOM
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+
 // --- 1. Importar TODOS los componentes de página/vista REALES ---
 import MainPage from './pages/MainPage.jsx';
 import AboutPage from './pages/about/AboutPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import SignupPage from './pages/SignupPage.jsx';
 import PasswordPage from './pages/PasswordPage.jsx';
-import RewardPage from './pages/RewardPage.jsx';
 import AdminLayout from './components/admin/AdminLayout.jsx';
-import Mundos from './components/game/Mundos.jsx';
-import SignlingusGame from './components/game/SignlingusGame.jsx';
+import World from './pages/world/WorldSelect.jsx';
+import RewardModal  from './pages/game/RewardModal.jsx'
+import CityPage from './pages/game/ciudad/CityScreen.jsx';
+import LevelScreen from './pages/game/ciudad/LevelScreen.jsx';
+import VideosPage from './pages/material/videos/VideoPage.jsx';
 
-// --- 2. Componente Principal de la Aplicación (Router) ---
+
+// Aquí deberías importar las otras páginas que usabas (BeachPage, JunglePage, CastlePage, etc.)
+// Por ejemplo:
+// import BeachPage from './pages/game/beach/BeachPage.jsx';
+// import JunglePage from './pages/game/jungle/JunglePage.jsx';
+// import CastlePage from './pages/game/castle/CastlePage.jsx';
+// import SecretLevelPage from './pages/game/SecretLevelPage.jsx';
+// import RewardPage from './pages/game/RewardPage.jsx';
+
 function App() {
-  // Estado para saber qué página mostrar. Empezamos en 'home' (la página de inicio).
-  const [currentPage, setCurrentPage] = useState('home');
-  
   // Estado para guardar la información del usuario logueado. 'null' significa que no hay sesión iniciada.
   const [user, setUser] = useState(null);
-
-  // Función para cambiar de página. Se la pasaremos a los componentes hijos.
-  const navigate = (page) => {
-    setCurrentPage(page);
-  };
 
   // Función para manejar el login.
   const handleLogin = (userData) => {
     setUser(userData);
-    // Lógica de redirección por rol
-    if (userData.role === 'estudiante') {
-      navigate('mundos');
-    } else if (userData.role === 'admin' || userData.role === 'asesor') {
-      navigate('admin');
-    }
-  };
-
-  // Función para renderizar la página correcta según el estado.
-  const renderPage = () => {
-    switch (currentPage) {
-      // --- Flujo de Autenticación y Páginas Públicas ---
-      case 'login':
-        return <LoginPage onLogin={handleLogin} navigate={navigate} />;
-      case 'signup':
-        return <SignupPage navigate={navigate} />;
-      case 'password':
-        return <PasswordPage navigate={navigate} />;
-      case 'about':
-        return <AboutPage navigate={navigate} />;
-      
-      // --- Flujo de Administrador ---
-      case 'admin':
-        // En un futuro, aquí podrías añadir una comprobación: si el usuario no es admin, redirigir a login.
-        return <AdminLayout />;
-      
-      // --- Flujo del Juego para Estudiantes ---
-      case 'mundos':
-        return <Mundos navigate={navigate} />;
-      case 'game':
-        return <SignlingusGame navigate={navigate} />;
-      case 'reward':
-        return <RewardPage navigate={navigate} />;
-        
-      // --- Página de Inicio por defecto ---
-      case 'home':
-      default:
-        return <MainPage navigate={navigate} />;
-    }
   };
 
   return (
-    <>
-      {renderPage()}
-    </>
+    <Router>
+      <Routes>
+        {/* --- Páginas públicas --- */}
+        <Route path="/" element={<MainPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/password" element={<PasswordPage />} />
+        <Route path="/level/:id" element={<LevelScreen />} />
+        <Route path="/world" element={<World />} />
+        <Route path="/ciudad" element={<CityPage />} />
+        <Route path="/reward" element={<RewardModal  />} />
+        <Route path="/videos" element={<VideosPage  />} />
+
+        {/* --- Ruta protegida admin --- */}
+        <Route
+          path="/admin/*"
+          element={
+            user && (user.role === 'admin' || user.role === 'asesor') ? (
+              <AdminLayout />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+
+        {/* --- Rutas para estudiantes / juego --- */}
+        <Route
+          path="/world"
+          element={
+            user && user.role === 'estudiante' ? (
+              <World />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route
+          path="/beach"
+          element={
+            user && user.role === 'estudiante' ? (
+              // <BeachPage />
+              <div>BeachPage placeholder</div> // Cambia esto cuando importes BeachPage
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route
+          path="/ciudad"
+          element={
+            user && user.role === 'estudiante' ? (
+              <CityPage />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+
+        {/* Rutas de niveles */}
+        <Route
+          path="/level/:id"
+          element={
+            user && user.role === 'estudiante' ? (
+              <LevelScreen levelId="/level/:id" />
+            ) : (
+              <Navigate to="/level/:id" replace />
+            )
+          }
+        />
+
+        {/* Otras rutas de juego: jungla, castillo, secretLevel, reward, etc.
+            Agrega igual que arriba con validación de usuario */}
+
+          <Route
+  path="/videos"
+  element={
+    user && user.role === 'estudiante' ? (
+      <VideosPage />
+    ) : (
+      <Navigate to="/videos" replace />
+    )
+  }
+/>
+
+
+        {/* Ruta por defecto: redirigir a inicio */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Router>
   );
 }
 

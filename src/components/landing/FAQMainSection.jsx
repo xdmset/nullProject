@@ -1,101 +1,134 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import FAQ from "../../assets/pagina/faq.png";
-// --- Assets ---
-// Usaremos una imagen de placeholder como en el original. Puedes cambiarla por una de tu carpeta de assets.
-const faqImageSrc = FAQ
+import PlusIcon from "../../assets/icons/plus.png";
+import MinusIcon from "../../assets/icons/minus.png";
 
-// --- Iconos en formato de componente React ---
-const PlusIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-    </svg>
-);
-const MinusIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 12H6" />
-    </svg>
-);
-
-// --- Componente de la Sección de FAQ ---
 export default function FAQMainSection() {
-    const [activeQuestionIndex, setActiveQuestionIndex] = useState(null);
+  const [activeQuestionIndex, setActiveQuestionIndex] = useState(null);
 
-    const heading = <>Algunas <span className="text-primary-500">preguntas ?</span></>;
-    const description = "Voces que inspiran y muestran cómo la Lengua de Señas Mexicano transforma vidas y fomenta la inclusión.";
-    const faqs = [
-        {
-            question: "¿Qué es el Lenguaje de Señas Mexicano (LSM) y por qué es importante?",
-            answer: "El LSM es una lengua visual-gestual utilizada por la comunidad sorda en México. Es importante porque permite la comunicación efectiva y fomenta la inclusión social de las personas sordas."
-        },
-        {
-            question: "¿Cuáles son las principales características que diferencian al LSM de otros idiomas?",
-            answer: "El LSM utiliza movimientos de manos, expresiones faciales y el espacio para comunicar. Tiene su propia gramática y vocabulario, distinto del español hablado."
-        },
-        {
-            question: "¿Cómo contribuye el aprendizaje del LSM a la inclusión social?",
-            answer: "Aprender LSM elimina barreras de comunicación, promueve la igualdad de oportunidades y ayuda a crear una sociedad más respetuosa y accesible para todos."
-        },
-        {
-            question: "¿Qué elementos visuales y expresivos son fundamentales para comunicarse en lengua de señas?",
-            answer: "Se usan la configuración y movimiento de las manos, la ubicación en el espacio, las expresiones faciales y la postura corporal para transmitir significado y emoción."
-        }
-    ];
+  const heading = (
+    <>
+      Algunas{" "}
+      <motion.span
+        className="text-primary-500"
+        animate={{ scale: [1, 1.1, 1], opacity: [1, 0.8, 1] }}
+        transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+      >
+        preguntas ?
+      </motion.span>
+    </>
+  );
 
-    const toggleQuestion = (questionIndex) => {
-        if (activeQuestionIndex === questionIndex) {
-            setActiveQuestionIndex(null);
-        } else {
-            setActiveQuestionIndex(questionIndex);
-        }
-    };
+  const description =
+    "Voces que inspiran y muestran cómo la Lengua de Señas Mexicano transforma vidas y fomenta la inclusión.";
 
-    return (
-        <div className="relative">
-            <div className="max-w-screen-xl mx-auto py-16 lg:py-20">
-                <div className="flex">
-                    {/* Columna de la Imagen */}
-                    <div className="hidden lg:flex w-5/12 flex-shrink-0 items-center justify-center">
-                        <div className="h-full max-h-[36rem] w-full overflow-hidden rounded shadow-md">
-                            <img src={FAQ} alt="Faq" className="w-full h-full object-cover rounded border shadow-lg"/>
-                        </div>
-                    </div>
-                    {/* Columna del Contenido de FAQ */}
-                    <div className="w-full lg:w-7/12 lg:ml-12">
-                        <h2 className="text-3xl sm:text-4xl font-black lg:text-left">{heading}</h2>
-                        <p className="max-w-xl mx-auto lg:mx-0 lg:text-left lg:max-w-none leading-relaxed text-sm sm:text-base lg:text-lg font-medium mt-4 text-gray-500">{description}</p>
-                        
-                        <dl className="mt-12">
-                            {faqs.map((faq, index) => (
-                                <div
-                                    key={index}
-                                    className="cursor-pointer mt-8 select-none border lg:border-0 px-8 py-4 lg:p-0 rounded-lg lg:rounded-none group"
-                                    onClick={() => toggleQuestion(index)}
-                                >
-                                    <dt className="flex justify-between items-center">
-                                        <span className="text-lg lg:text-xl font-semibold">{faq.question}</span>
-                                        <span className="ml-2 bg-primary-500 text-gray-100 p-1 rounded-full group-hover:bg-blue-700 group-hover:text-gray-200 transition duration-300">
-                                            {activeQuestionIndex === index ? <MinusIcon /> : <PlusIcon />}
-                                        </span>
-                                    </dt>
-                                    <motion.dd
-                                        className="pointer-events-none text-sm sm:text-base leading-relaxed overflow-hidden"
-                                        variants={{
-                                            open: { opacity: 1, height: "auto", marginTop: "16px" },
-                                            collapsed: { opacity: 0, height: 0, marginTop: "0px" }
-                                        }}
-                                        initial="collapsed"
-                                        animate={activeQuestionIndex === index ? "open" : "collapsed"}
-                                        transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
-                                    >
-                                        {faq.answer}
-                                    </motion.dd>
-                                </div>
-                            ))}
-                        </dl>
-                    </div>
-                </div>
-            </div>
+  const faqs = [
+    {
+      question: "¿Qué es el Lenguaje de Señas Mexicano (LSM) y por qué es importante?",
+      answer:
+        "El LSM es una lengua visual-gestual utilizada por la comunidad sorda en México. Es importante porque permite la comunicación efectiva y fomenta la inclusión social de las personas sordas.",
+    },
+    {
+      question: "¿Cuáles son las principales características que diferencian al LSM de otros idiomas?",
+      answer:
+        "El LSM utiliza movimientos de manos, expresiones faciales y el espacio para comunicar. Tiene su propia gramática y vocabulario, distinto del español hablado.",
+    },
+    {
+      question: "¿Cómo contribuye el aprendizaje del LSM a la inclusión social?",
+      answer:
+        "Aprender LSM elimina barreras de comunicación, promueve la igualdad de oportunidades y ayuda a crear una sociedad más respetuosa y accesible para todos.",
+    },
+    {
+      question: "¿Qué elementos visuales y expresivos son fundamentales para comunicarse en lengua de señas?",
+      answer:
+        "Se usan la configuración y movimiento de las manos, la ubicación en el espacio, las expresiones faciales y la postura corporal para transmitir significado y emoción.",
+    },
+  ];
+
+  const toggleQuestion = (index) => {
+    setActiveQuestionIndex((prev) => (prev === index ? null : index));
+  };
+
+  return (
+  <div className="relative py-16 lg:py-24 bg-white -mx-6 px-6 overflow-hidden">
+    {/* Burbujas decorativas */}
+    <div className="absolute inset-0 z-0 pointer-events-none">
+      <div className="absolute w-40 h-40 bg-primary-200 rounded-full opacity-20 animate-ping top-0 left-10"></div>
+      <div className="absolute w-24 h-24 bg-primary-300 rounded-full opacity-20 animate-ping bottom-0 right-16"></div>
+    </div>
+
+    <div className="max-w-screen-xl mx-auto flex flex-col lg:flex-row gap-12 items-center relative z-10">
+        {/* Imagen */}
+        <motion.div
+          className="hidden lg:block w-5/12"
+          initial={{ scale: 0.85, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+          <img
+            src={FAQ}
+            alt="Ilustración de FAQ"
+            className="rounded-full w-full max-w-[500px] shadow-xl"
+            loading="lazy"
+          />
+        </motion.div>
+
+        {/* Preguntas */}
+        <div className="w-full lg:w-7/12">
+          <h2 className="text-4xl sm:text-5xl font-black text-center lg:text-left text-gray-800">
+            {heading}
+          </h2>
+          <p className="text-base sm:text-lg text-gray-600 font-medium mt-4 mb-10 text-center lg:text-left max-w-xl">
+            {description}
+          </p>
+
+          <dl className="space-y-6">
+            {faqs.map((faq, index) => (
+              <motion.div
+                key={index}
+                layout
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className={`bg-gradient-to-br from-white via-primary-50 to-white border-2 border-primary-100 hover:border-primary-300 rounded-3xl p-6 sm:p-8 shadow-md transition-all cursor-pointer`}
+                onClick={() => toggleQuestion(index)}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                <dt className="flex justify-between items-center">
+                  <span className="text-lg sm:text-xl font-bold text-gray-800">
+                    {faq.question}
+                  </span>
+                  <motion.img
+                    src={activeQuestionIndex === index ? MinusIcon : PlusIcon}
+                    alt={activeQuestionIndex === index ? "Cerrar" : "Abrir"}
+                    className="w-7 h-7 object-contain"
+                    animate={{ rotate: activeQuestionIndex === index ? 90 : 0 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                </dt>
+
+                <AnimatePresence initial={false}>
+                  {activeQuestionIndex === index && (
+                    <motion.dd
+                      key="content"
+                      className="mt-4 text-gray-700 text-base sm:text-lg"
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.35, ease: "easeInOut" }}
+                      style={{ overflow: "hidden" }}
+                    >
+                      {faq.answer}
+                    </motion.dd>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            ))}
+          </dl>
         </div>
-    );
-};
+      </div>
+    </div>
+  );
+}

@@ -2,7 +2,7 @@ import React from "react";
 
 // --- Assets ---
 // Asegúrate de que la ruta a tu imagen sea correcta en la carpeta /src/assets/
-import TeamIllustrationSrc from "../../assets/team-illustration-2.svg";
+import TeamIllustrationSrc from "../../assets/logo.png";
 
 // --- Componente de la Sección "Developed By" ---
 export default function DevelopedAboutSection({ textOnLeft = true }) {
