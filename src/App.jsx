@@ -12,18 +12,15 @@ import PasswordPage from './pages/PasswordPage.jsx';
 import AdminLayout from './components/admin/AdminLayout.jsx';
 import World from './pages/world/WorldSelect.jsx';
 import RewardModal  from './pages/game/RewardModal.jsx'
-import CityPage from './pages/game/ciudad/CityScreen.jsx';
-import LevelScreen from './pages/game/ciudad/LevelScreen.jsx';
 import VideosPage from './pages/material/videos/VideoPage.jsx';
+import InfoPage from './pages/material/info/InfoPage.jsx';
+import ProfilePage from './pages/profile/ProfilePage.jsx';
 
-
-// Aquí deberías importar las otras páginas que usabas (BeachPage, JunglePage, CastlePage, etc.)
-// Por ejemplo:
-// import BeachPage from './pages/game/beach/BeachPage.jsx';
-// import JunglePage from './pages/game/jungle/JunglePage.jsx';
-// import CastlePage from './pages/game/castle/CastlePage.jsx';
-// import SecretLevelPage from './pages/game/SecretLevelPage.jsx';
-// import RewardPage from './pages/game/RewardPage.jsx';
+//Mundos
+import CityPage from './pages/game/ciudad/CityPage.jsx';
+import CastlePage from './pages/game/castillo/CastlePage.jsx';
+import JunglaPage from './pages/game/jungla/JunglaPage.jsx';
+import LevelRouter from './pages/game/LevelRouter.jsx';
 
 function App() {
   // Estado para guardar la información del usuario logueado. 'null' significa que no hay sesión iniciada.
@@ -43,11 +40,15 @@ function App() {
         <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/password" element={<PasswordPage />} />
-        <Route path="/level/:id" element={<LevelScreen />} />
         <Route path="/world" element={<World />} />
         <Route path="/ciudad" element={<CityPage />} />
+        <Route path="/castillo" element={<CastlePage />} />
+        <Route path="/jungla" element={<JunglaPage />} />
+        <Route path="/level/:world/:id" element={<LevelRouter />} />
         <Route path="/reward" element={<RewardModal  />} />
         <Route path="/videos" element={<VideosPage  />} />
+        <Route path='/info' element={<InfoPage />} />
+        <Route path='/profile' element={<ProfilePage />} />
 
         {/* --- Ruta protegida admin --- */}
         <Route
@@ -68,7 +69,7 @@ function App() {
             user && user.role === 'estudiante' ? (
               <World />
             ) : (
-              <Navigate to="/login" replace />
+              <Navigate to="/world" replace />
             )
           }
         />
@@ -93,33 +94,72 @@ function App() {
             )
           }
         />
-
-        {/* Rutas de niveles */}
         <Route
-          path="/level/:id"
+          path="/jungla"
           element={
             user && user.role === 'estudiante' ? (
-              <LevelScreen levelId="/level/:id" />
+              <JunglaPage />
             ) : (
-              <Navigate to="/level/:id" replace />
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route
+          path="/castillo"
+          element={
+            user && user.role === 'estudiante' ? (
+              <CastlePage />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+          
+
+        {/* Rutas de niveles */}
+      <Route
+        path="/level/:world/:id"
+        element={
+          user && user.role === 'estudiante' ? (
+            <LevelRouter />
+          ) : (
+            <Navigate to="/" replace />
+          )
+        }
+      />
+
+        <Route
+          path="/videos"
+          element={
+            user && user.role === 'estudiante' ? (
+              <VideosPage />
+            ) : (
+              <Navigate to="/videos" replace />
             )
           }
         />
 
-        {/* Otras rutas de juego: jungla, castillo, secretLevel, reward, etc.
-            Agrega igual que arriba con validación de usuario */}
+        <Route
+          path="/info"
+          element={
+            user && user.role === 'estudiante' ? (
+              <InfoPage />
+            ) : (
+              <Navigate to="/info" replace />
+            )
+          }
+        />
 
-          <Route
-  path="/videos"
-  element={
-    user && user.role === 'estudiante' ? (
-      <VideosPage />
-    ) : (
-      <Navigate to="/videos" replace />
-    )
-  }
-/>
-
+        <Route
+          path="/profile"
+          element={
+            user && user.role === 'estudiante' ? (
+              <InfoPage />
+            ) : (
+              <Navigate to="/profile" replace />
+            )
+          }
+        />
 
         {/* Ruta por defecto: redirigir a inicio */}
         <Route path="*" element={<Navigate to="/" replace />} />

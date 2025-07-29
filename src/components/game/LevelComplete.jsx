@@ -4,14 +4,11 @@ import Like from '../../assets/icons/like.png'
 import GoodJob from '../../assets/icons/good-job.png'
 import Trophy from '../../assets/icons/trophy-cup.png'
 
-// import { saveProgressToBackend (cambiar nombre de la funcion segun sea necesario) } from '../services/apiService'; // Importar el servicio de conexion backend
-
 export default function LevelComplete({ livesRemaining, onClose }) {
-  const { id } = useParams();
+  const { id, world } = useParams();
   const navigate = useNavigate();
   const [stars, setStars] = useState(0);
 
-  // Calcular estrellas basadas en vidas restantes
   useEffect(() => {
     if (livesRemaining >= 3) setStars(3);
     else if (livesRemaining === 2) setStars(2);
@@ -19,46 +16,45 @@ export default function LevelComplete({ livesRemaining, onClose }) {
     else setStars(0);
   }, [livesRemaining]);
 
-
   const handleNextLevel = () => {
-    saveStars(); // Guardar estrellas antes de navegar
+    saveStars();
     onClose();
     setTimeout(() => {
-      navigate(`/level/${parseInt(id) + 1}`, {
-        state: { 
-          reset: true
-        }
+      navigate(`/level/${world}/${parseInt(id) + 1}`, {
+        state: { reset: true }
       });
     }, 300);
   };
-
 
   const handleWorldMap = () => {
     saveStars();
     onClose();
     setTimeout(() => {
-      navigate('/ciudad');
+      navigate(`/${world}`);
     }, 300);
   };
 
-const saveStars = () => {
-  const levelNumber = parseInt(id);
-  
-  // Guardar estrellas
-  const storedStars = JSON.parse(localStorage.getItem('levelStars')) || {};
-  if (!storedStars[levelNumber] || storedStars[levelNumber] < stars) {
-    storedStars[levelNumber] = stars;
-    localStorage.setItem('levelStars', JSON.stringify(storedStars));
-  }
+  const saveStars = () => {
+    const levelNumber = parseInt(id);
 
-  // Guardar nivel completado
-  const completed = JSON.parse(localStorage.getItem('completedLevels')) || [];
-  if (!completed.includes(levelNumber)) {
-    completed.push(levelNumber);
-    localStorage.setItem('completedLevels', JSON.stringify(completed));
-  }
-};
+    // Guardar estrellas
+    const starsKey = `levelStars-${world}`;
+    const storedStars = JSON.parse(localStorage.getItem(starsKey)) || {};
 
+    if (!storedStars[levelNumber] || storedStars[levelNumber] < stars) {
+      storedStars[levelNumber] = stars;
+      localStorage.setItem(starsKey, JSON.stringify(storedStars));
+    }
+
+    // Guardar nivel completado
+    const completedKey = `completedLevels-${world}`;
+    const completed = JSON.parse(localStorage.getItem(completedKey)) || [];
+
+    if (!completed.includes(levelNumber)) {
+      completed.push(levelNumber);
+      localStorage.setItem(completedKey, JSON.stringify(completed));
+    }
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 backdrop-blur-sm">
@@ -98,7 +94,7 @@ const saveStars = () => {
           )}
         </p>
 
-            <div className="flex justify-center gap-4 mt-4 flex-wrap">
+        <div className="flex justify-center gap-4 mt-4 flex-wrap">
           {parseInt(id) < 4 && (
             <button
               onClick={handleNextLevel}

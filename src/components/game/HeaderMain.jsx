@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
 
-export default function SimpleHeader({ navigate }) {
+export default function SimpleHeader() {
+  const navigate = useNavigate();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const popupRef = useRef(null);
 
@@ -28,12 +30,8 @@ export default function SimpleHeader({ navigate }) {
     <div className="relative bg-gradient-to-r from-[#005EB8] via-[#412DB2] to-[#7DF9FF] text-white w-full px-6 py-2 sm:py-3 rounded-b-3xl shadow-md shadow-purple-500/40 z-50">
       <div className="max-w-screen-xl mx-auto flex justify-between items-center">
         {/* Logo */}
-        <a
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            navigate("home");
-          }}
+        <button
+          onClick={() => navigate("/home")}
           className="flex items-center font-black text-white hover:scale-105 transition-transform duration-300"
         >
           <img
@@ -47,7 +45,7 @@ export default function SimpleHeader({ navigate }) {
               Manos parlantes, mentes brillantes
             </span>
           </div>
-        </a>
+        </button>
 
         {/* Botón Perfil */}
         <div className="relative">
@@ -91,7 +89,7 @@ export default function SimpleHeader({ navigate }) {
                 <button
                   onClick={() => {
                     setIsProfileOpen(false);
-                    navigate("profile");
+                    navigate("/profile");
                   }}
                   className="block w-full text-left px-4 py-3 hover:bg-gray-100 rounded-t-xl font-semibold"
                 >
@@ -100,7 +98,7 @@ export default function SimpleHeader({ navigate }) {
                 <button
                   onClick={() => {
                     setIsProfileOpen(false);
-                    navigate("logout");
+                    navigate("/logout");
                   }}
                   className="block w-full text-left px-4 py-3 hover:bg-gray-100 rounded-b-xl font-semibold text-red-600"
                 >

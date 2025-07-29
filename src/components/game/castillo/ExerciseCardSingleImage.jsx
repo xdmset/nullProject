@@ -1,4 +1,10 @@
-export default function ExerciseCardSingleImage({ exercise, answer, setAnswer, checkAnswer, lives }) {
+import { useState, useEffect } from 'react';
+
+export default function ExerciseCardSingleImage({ exercise, answer, setAnswer, checkAnswer, lives, isChecking }) {
+  useEffect(() => {
+    setAnswer('');
+  }, [exercise, isChecking]);
+
   return (
     <div className="text-center">
       <h2 className="text-xl font-semibold mb-4">{exercise.question}</h2>
@@ -7,7 +13,7 @@ export default function ExerciseCardSingleImage({ exercise, answer, setAnswer, c
         <img
           src={exercise.image}
           alt="Seña LSM"
-          className="w-48 h-48 object-contain border-2 border-gray-200 rounded-lg"
+          className="w-64 h-64 object-contain border-2 border-gray-200 rounded-lg"
         />
       </div>
 
@@ -25,14 +31,14 @@ export default function ExerciseCardSingleImage({ exercise, answer, setAnswer, c
         />
         <button
           onClick={checkAnswer}
-          disabled={!answer || lives <= 0}
+          disabled={!answer || lives <= 0 || isChecking}
           className={`px-6 py-2 font-bold rounded-lg shadow-lg transition-colors
-            ${answer && lives > 0
+            ${answer && lives > 0 && !isChecking
               ? "bg-purple-600 hover:bg-purple-700 text-white"
               : "bg-gray-300 text-gray-500 cursor-not-allowed"}
           `}
         >
-          Comprobar
+          {isChecking ? 'Comprobando...' : 'Comprobar'}
         </button>
       </div>
     </div>

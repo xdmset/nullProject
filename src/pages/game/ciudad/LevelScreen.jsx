@@ -7,7 +7,7 @@ import LoseOverlay from "../../../components/game/Loseoverlay";
 import Header from "../../../components/game/Header";
 import ExerciseCardSingleImage from "../../../components/game/ciudad/ExerciseCardSingleImage";
 import ExerciseCardDualChoice from "../../../components/game/ciudad/ExerciseCardDualChoice";
-import LevelComplete from "../../../components/game/LevelComplete";
+import LevelComplete from '../../../components/game/levelComplete';
 import { useRandomExercises } from "../../../hooks/useRandomExercises";
 
 export default function LevelScreen() {
