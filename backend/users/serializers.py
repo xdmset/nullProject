@@ -3,6 +3,7 @@ from .models import Usuario, Rol, Logro, Perfil
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 # --- Serializers para LEER datos ---
+
 class RolSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rol
@@ -19,6 +20,9 @@ class PerfilSerializer(serializers.ModelSerializer):
         fields = ['avatar', 'nombre_padre', 'apellidos_padre']
 
 class UsuarioSerializer(serializers.ModelSerializer):
+    """
+    Serializer para MOSTRAR la información de un usuario con sus datos anidados.
+    """
     perfil = PerfilSerializer(read_only=True)
     rol = RolSerializer(read_only=True)
     logros = LogroSerializer(many=True, read_only=True)
@@ -27,8 +31,13 @@ class UsuarioSerializer(serializers.ModelSerializer):
         model = Usuario
         fields = ['id', 'username', 'email', 'nombre_menor', 'rol', 'perfil', 'logros', 'date_joined']
 
+
 # --- Serializer para CREAR el usuario y su perfil ---
+
 class UserCreateSerializer(serializers.ModelSerializer):
+    """
+    Serializer para CREAR un nuevo usuario y su perfil asociado.
+    """
     nombre_padre = serializers.CharField(write_only=True, required=True)
     apellidos_padre = serializers.CharField(write_only=True, required=True)
     rol = serializers.PrimaryKeyRelatedField(queryset=Rol.objects.all(), required=False, allow_null=True)
@@ -57,7 +66,9 @@ class UserCreateSerializer(serializers.ModelSerializer):
         Perfil.objects.create(usuario=user, **perfil_data)
         return user
 
+
 # --- Serializer para permitir Login con Email o Username ---
+
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         username_or_email = attrs.get('username')

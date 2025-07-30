@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from .models import Usuario, Rol, Logro, Perfil
 from rewards.models import Progreso
 from lessons.models import MaterialDidactico
-from django.db.models import Count
+from django.db.models import Sum, Count
 from .serializers import (
     UsuarioSerializer,
     RolSerializer,
@@ -80,9 +80,19 @@ class UserStatsAPIView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, *args, **kwargs):
         user = self.request.user
-        completed_levels = Progreso.objects.filter(usuario=user, porcentaje_avance=100).count()
-        completed_worlds = Progreso.objects.filter(usuario=user, porcentaje_avance=100).values('nivel__mundo').distinct().count()
+
+        # --- CORRECCIÓN ---
+        # Se actualiza la lógica para que coincida con el nuevo modelo Progreso
+        
+        # Suma todos los niveles completados de todos los mundos
+        niveles_data = Progreso.objects.filter(usuario=user).aggregate(total=Sum('niveles_completados'))
+        completed_levels = niveles_data['total'] or 0
+
+        # Cuenta cuántos mundos tienen un progreso del 100%
+        completed_worlds = Progreso.objects.filter(usuario=user, porcentaje_avance=100).count()
+
         achievements_count = user.logros.count()
+        
         stats = {
             'completed_levels': completed_levels,
             'completed_worlds': completed_worlds,
@@ -97,18 +107,19 @@ class ProfileUpdateAPIView(generics.UpdateAPIView):
     def get_object(self):
         return self.request.user.perfil
 
-# --- CORRECCIÓN DE INDENTACIÓN AQUÍ ---
-# Estas clases deben estar al nivel principal, no anidadas.
 class ExportProgresoCSV(APIView):
     permission_classes = [IsAdminUser]
     def get(self, request, *args, **kwargs):
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="progresos.csv"'
         writer = csv.writer(response)
-        writer.writerow(['ID', 'Usuario', 'Nivel', 'Porcentaje', 'Intentos'])
-        progresos = Progreso.objects.all().select_related('usuario', 'nivel')
+        
+        # --- CORRECCIÓN ---
+        # Se actualizan las columnas y la consulta
+        writer.writerow(['ID', 'Usuario', 'Mundo', 'Porcentaje', 'Niveles Completados', 'Intentos'])
+        progresos = Progreso.objects.all().select_related('usuario', 'mundo')
         for p in progresos:
-            writer.writerow([p.id, p.usuario.username, p.nivel.nombre, p.porcentaje_avance, p.intentos_realizados])
+            writer.writerow([p.id, p.usuario.username, p.mundo.nombre, p.porcentaje_avance, p.niveles_completados, p.intentos_realizados])
         return response
 
 class ExportMaterialDidacticoCSV(APIView):
