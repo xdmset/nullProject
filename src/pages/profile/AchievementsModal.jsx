@@ -13,7 +13,6 @@ export function AchievementsModal({ onClose, achievements }) {
         </div>
         
         <div className="flex flex-col gap-3">
-          {/* 1. Comprueba si la lista de logros tiene elementos */}
           {achievements && achievements.length > 0 ? (
             // 2. Mapea sobre los logros que vienen de la API
             achievements.map((logro) => (

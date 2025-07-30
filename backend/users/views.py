@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from .models import Usuario, Rol, Logro, Perfil
 from rewards.models import Progreso
+from lessons.models import MaterialDidactico
 from django.db.models import Count
 from .serializers import (
     UsuarioSerializer,
@@ -13,7 +14,7 @@ from .serializers import (
     LogroSerializer,
     UserCreateSerializer,
     CustomTokenObtainPairSerializer,
-    PerfilSerializer
+    PerfilSerializer 
 )
 from rest_framework_simplejwt.views import TokenObtainPairView
 
@@ -36,21 +37,33 @@ class UserCreateAPIView(generics.CreateAPIView):
 
 class ExportUsersCSV(APIView):
     permission_classes = [IsAdminUser]
+    
     def get(self, request, *args, **kwargs):
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="usuarios.csv"'
         writer = csv.writer(response)
+        
         writer.writerow(['ID', 'Username', 'Email', 'Nombre del Menor', 'Nombre del Padre', 'Apellidos del Padre'])
+        
         usuarios = Usuario.objects.select_related('perfil').all()
+        
         for usuario in usuarios:
+            if hasattr(usuario, 'perfil') and usuario.perfil is not None:
+                nombre_padre = usuario.perfil.nombre_padre
+                apellidos_padre = usuario.perfil.apellidos_padre
+            else:
+                nombre_padre = ''
+                apellidos_padre = ''
+
             writer.writerow([
                 usuario.id,
                 usuario.username,
                 usuario.email,
                 usuario.nombre_menor,
-                usuario.perfil.nombre_padre,
-                usuario.perfil.apellidos_padre
+                nombre_padre,
+                apellidos_padre
             ])
+
         return response
 
 class MeAPIView(generics.RetrieveAPIView):
@@ -78,14 +91,34 @@ class UserStatsAPIView(APIView):
         return Response(stats)
 
 class ProfileUpdateAPIView(generics.UpdateAPIView):
-    """
-    Endpoint para que un usuario autenticado actualice su perfil.
-    Solo permite peticiones PATCH (actualización parcial).
-    """
     queryset = Perfil.objects.all()
     serializer_class = PerfilSerializer
     permission_classes = [IsAuthenticated]
-
     def get_object(self):
-        # Asegura que el usuario solo pueda actualizar su propio perfil
         return self.request.user.perfil
+
+# --- CORRECCIÓN DE INDENTACIÓN AQUÍ ---
+# Estas clases deben estar al nivel principal, no anidadas.
+class ExportProgresoCSV(APIView):
+    permission_classes = [IsAdminUser]
+    def get(self, request, *args, **kwargs):
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="progresos.csv"'
+        writer = csv.writer(response)
+        writer.writerow(['ID', 'Usuario', 'Nivel', 'Porcentaje', 'Intentos'])
+        progresos = Progreso.objects.all().select_related('usuario', 'nivel')
+        for p in progresos:
+            writer.writerow([p.id, p.usuario.username, p.nivel.nombre, p.porcentaje_avance, p.intentos_realizados])
+        return response
+
+class ExportMaterialDidacticoCSV(APIView):
+    permission_classes = [IsAdminUser]
+    def get(self, request, *args, **kwargs):
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="material_didactico.csv"'
+        writer = csv.writer(response)
+        writer.writerow(['ID', 'Descripción', 'Tipo', 'URL'])
+        materiales = MaterialDidactico.objects.all()
+        for m in materiales:
+            writer.writerow([m.id, m.descripcion, m.tipo, m.url])
+        return response

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import Dashboard from './Dashboard';
+import Dashboard, { SystemManagement } from './Dashboard'; // Importa el nuevo componente
 import GestionEstudiantes from './GestionEstudiantes';
 import GestionContenido from './GestionContenido';
 import GestionUsuarios from './GestionUsuarios';
 import logo from '../../assets/Logo.png';
-import { logout } from '../../services/apiService'; // Asumimos que getMe existe para obtener datos del usuario
+import { logout } from '../../services/apiService';
 
 const NavLink = ({ viewName, activeView, setActiveView, children, isVisible = true }) => {
   if (!isVisible) return null;
@@ -24,26 +24,15 @@ const NavLink = ({ viewName, activeView, setActiveView, children, isVisible = tr
 
 const AdminLayout = () => {
   const [activeView, setActiveView] = useState('dashboard');
-  const [user, setUser] = useState({ role: 'admin', name: 'Admin User' }); // Valor inicial mientras carga
+  const [user, setUser] = useState({ role: 'admin', name: 'Admin User' });
 
-  // Simulación de carga de datos del usuario al montar el componente
   useEffect(() => {
-    // En una app real, aquí llamarías a una función como getMe()
-    // para obtener los datos del usuario usando el token guardado.
-    // const fetchUser = async () => {
-    //   try {
-    //     const response = await getMe();
-    //     setUser({ role: response.data.rol.nombre.toLowerCase(), name: response.data.username });
-    //   } catch (error) {
-    //     handleLogout(); // Si falla, cerramos sesión
-    //   }
-    // };
-    // fetchUser();
+    // Aquí iría la lógica para cargar los datos del usuario real
   }, []);
 
   const handleLogout = () => {
     logout();
-    window.location.href = '/login'; // Redirige a la página de login
+    window.location.href = '/login';
   };
 
   const renderView = () => {
@@ -56,6 +45,8 @@ const AdminLayout = () => {
         return <GestionContenido />;
       case 'usuarios':
         return user.role === 'admin' ? <GestionUsuarios /> : <p>Acceso denegado.</p>;
+      case 'sistema': // Nueva vista
+        return user.role === 'admin' ? <SystemManagement /> : <p>Acceso denegado.</p>;
       default:
         return <Dashboard currentUserRole={user.role} />;
     }
@@ -75,6 +66,10 @@ const AdminLayout = () => {
           <NavLink viewName="usuarios" activeView={activeView} setActiveView={setActiveView} isVisible={user.role === 'admin'}>
             Gestión de Usuarios
           </NavLink>
+          {/* Nuevo enlace a la gestión del sistema */}
+          <NavLink viewName="sistema" activeView={activeView} setActiveView={setActiveView} isVisible={user.role === 'admin'}>
+            Gestión del Sistema
+          </NavLink>
         </nav>
         <div className="mt-auto">
           <button onClick={handleLogout} className="w-full text-left flex items-center px-4 py-2.5 text-gray-300 hover:bg-blue-800 hover:text-white rounded-lg">
@@ -85,7 +80,7 @@ const AdminLayout = () => {
 
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="bg-white shadow-sm p-4 flex justify-between items-center">
-          <h2 className="text-xl font-semibold text-gray-700 capitalize">{activeView}</h2>
+          <h2 className="text-xl font-semibold text-gray-700 capitalize">{activeView.replace('-', ' ')}</h2>
           <div className="flex items-center">
             <span className="mr-3 font-semibold text-gray-700">{user.name}</span>
             <img className="h-10 w-10 rounded-full object-cover" src="https://placehold.co/100x100/a99ed6/41279b?text=A" alt="User avatar" />

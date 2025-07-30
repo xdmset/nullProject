@@ -16,7 +16,9 @@ from users.views import (
     ExportUsersCSV,
     MeAPIView,
     CustomTokenObtainPairView,
-    UserStatsAPIView  # <-- Importa la vista de estadísticas
+    UserStatsAPIView,
+    ExportProgresoCSV,       
+    ExportMaterialDidacticoCSV  # 
 )
 
 # Crea el router para las rutas automáticas
@@ -50,4 +52,8 @@ urlpatterns = [
     # --- Endpoints de Autenticación ---
     path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
+     path('api/v1/export/users-csv/', ExportUsersCSV.as_view(), name='export-users-csv'),
+    path('api/v1/export/progreso-csv/', ExportProgresoCSV.as_view(), name='export-progreso-csv'),
+    path('api/v1/export/material-csv/', ExportMaterialDidacticoCSV.as_view(), name='export-material-csv'),
 ]

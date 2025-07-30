@@ -24,7 +24,7 @@ apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (error.response && error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
         const refreshToken = localStorage.getItem('refreshToken');
@@ -54,20 +54,31 @@ export const logout = () => {
   delete apiClient.defaults.headers.common['Authorization'];
 };
 
+// --- Funciones de Datos ---
 export const getMe = () => apiClient.get('/api/v1/usuarios/me/');
 export const getUserStats = () => apiClient.get('/api/v1/usuarios/me/stats/');
 export const getRoles = () => apiClient.get('/api/v1/roles/');
 export const getContenido = () => apiClient.get('/api/v1/mundos/');
 export const getProgresoEstudiantes = () => apiClient.get('/api/v1/progresos/');
 export const getUsuariosAdmin = () => apiClient.get('/api/v1/usuarios/?rol__nombre__in=Administrador,Asesor');
-export const createUser = (userData) => apiClient.post('/api/v1/usuarios/crear/', userData);
-export const exportUsersCSV = () => apiClient.get('/api/v1/export/users-csv/', { responseType: 'blob' });
-export const updateUserProfile = (profileData) => apiClient.patch('/api/v1/perfil/update/', profileData);
-
-// --- Función para obtener la lista de avatares ---
-// Llama al endpoint sin filtros, obteniendo todas las recompensas
 export const getAvailableAvatars = () => apiClient.get('/api/v1/recompensas/');
 
-// Funciones de gestión
-export const triggerBackup = () => apiClient.post('/api/management/backup/');
-export const triggerRestore = (payload) => apiClient.post('/api/management/restore/full/', payload);
+// --- Funciones de Acciones ---
+export const createUser = (userData) => apiClient.post('/api/v1/usuarios/crear/', userData);
+export const updateUserProfile = (profileData) => apiClient.patch('/api/v1/perfil/update/', profileData);
+
+// --- Funciones de Exportación ---
+export const exportUsersCSV = () => apiClient.get('/api/v1/export/users-csv/', { responseType: 'blob' });
+export const exportProgresoCSV = () => apiClient.get('/api/v1/export/progreso-csv/', { responseType: 'blob' });
+export const exportMaterialCSV = () => apiClient.get('/api/v1/export/material-csv/', { responseType: 'blob' });
+
+// --- Funciones de Gestión del Sistema ---
+export const triggerBackup = () => apiClient.post('/api/management/backup/full/', null, { responseType: 'blob' });
+export const triggerFullRestore = (formData) => apiClient.post('/api/management/restore/full/', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+});
+export const triggerTableBackup = (tableName) => apiClient.post('/api/management/backup/table/', { table_name: tableName }, { responseType: 'blob' });
+export const triggerTableRestore = (formData) => apiClient.post('/api/management/restore/table/', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+});
+export const triggerResetDatabase = () => apiClient.post('/api/management/reset/');

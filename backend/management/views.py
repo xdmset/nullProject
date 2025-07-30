@@ -1,82 +1,123 @@
-# management/views.py
-
 import subprocess
-import io
-from django.core.management import call_command
+import datetime
 from django.conf import settings
+from django.http import HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from rest_framework import status
+from rest_framework.parsers import MultiPartParser, FormParser
+from users.models import Usuario
 
+# --- Vistas de Respaldo y Restauración ---
 class BackupDatabaseAPIView(APIView):
-    """
-    Endpoint para disparar un respaldo completo de la base de datos.
-    Crea un archivo .sql en el servidor.
-    """
-    permission_classes = [IsAdminUser] # Solo administradores pueden acceder.
-
+    permission_classes = [IsAdminUser]
     def post(self, request, *args, **kwargs):
+        db = settings.DATABASES['default']
+        timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+        filename = f"backup_{db['NAME']}_{timestamp}.sql"
+        command = [
+            'pg_dump',
+            '--dbname=postgresql://{}:{}@{}:{}/{}'.format(
+                db['USER'], db['PASSWORD'], db['HOST'], db['PORT'], db['NAME']
+            ),
+            '--clean'
+        ]
         try:
-            # Usamos un buffer para capturar la salida del comando y mostrarla en la respuesta.
-            buffer = io.StringIO()
-            call_command('backup_db', stdout=buffer)
-            output = buffer.getvalue()
-            return Response({"detail": output}, status=status.HTTP_200_OK)
+            process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            stdout, stderr = process.communicate()
+            if process.returncode != 0:
+                return HttpResponse(stderr, status=500, content_type='text/plain')
+            response = HttpResponse(stdout, content_type='application/sql')
+            response['Content-Disposition'] = f'attachment; filename="{filename}"'
+            return response
         except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return HttpResponse(f"Error al generar el respaldo: {e}", status=500, content_type='text/plain')
 
 class RestoreDatabaseAPIView(APIView):
-    """
-    Endpoint para restaurar la base de datos desde un archivo de respaldo.
-    Requiere una confirmación explícita para evitar accidentes.
-    """
     permission_classes = [IsAdminUser]
-
+    parser_classes = (MultiPartParser, FormParser)
     def post(self, request, *args, **kwargs):
-        backup_file = request.data.get('backup_file')
-        confirmation = request.data.get('confirmation')
-
-        if not backup_file:
-            return Response({"error": "Debes especificar un 'backup_file'."}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Medida de seguridad CRÍTICA para evitar una restauración accidental.
-        if confirmation != "RESTAURAR BASE DE DATOS COMPLETA":
-            return Response(
-                {"error": "Confirmación incorrecta. Para restaurar, debes enviar la frase exacta 'RESTAURAR BASE DE DATOS COMPLETA' en el campo 'confirmation'."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
+        file_obj = request.data.get('backup_file')
+        if not file_obj:
+            return Response({"error": "No se proporcionó ningún archivo de respaldo."}, status=status.HTTP_400_BAD_REQUEST)
+        temp_file_path = 'temp_restore.sql'
+        with open(temp_file_path, 'wb+') as temp_file:
+            for chunk in file_obj.chunks():
+                temp_file.write(chunk)
+        db = settings.DATABASES['default']
+        command = f"psql --dbname=postgresql://{db['USER']}:{db['PASSWORD']}@{db['HOST']}:{db['PORT']}/{db['NAME']} -f {temp_file_path}"
         try:
-            # Llama al comando de restauración que creamos antes.
-            # Nota: Este comando tiene su propia confirmación en la terminal, pero esta vista la maneja para la API.
-            db = settings.DATABASES['default']
-            command = f"psql --dbname=postgresql://{db['USER']}:{db['PASSWORD']}@{db['HOST']}:{db['PORT']}/{db['NAME']} -f {backup_file}"
             subprocess.run(command, shell=True, check=True)
-            return Response({"detail": f"Restauración desde '{backup_file}' completada exitosamente."}, status=status.HTTP_200_OK)
-
-        except FileNotFoundError:
-             return Response({"error": f"El archivo de respaldo '{backup_file}' no fue encontrado en el servidor."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"detail": "Restauración completada exitosamente."}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": f"Error durante la restauración: {e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+class BackupTableAPIView(APIView):
+    permission_classes = [IsAdminUser]
+    def post(self, request, *args, **kwargs):
+        table_name = request.data.get('table_name')
+        if not table_name:
+            return Response({"error": "No se proporcionó nombre de tabla."}, status=status.HTTP_400_BAD_REQUEST)
+        db = settings.DATABASES['default']
+        filename = f"backup_{table_name}.sql"
+        command = [
+            'pg_dump',
+            '--dbname=postgresql://{}:{}@{}:{}/{}'.format(
+                db['USER'], db['PASSWORD'], db['HOST'], db['PORT'], db['NAME']
+            ),
+            '--table', table_name,
+            '--clean', '--column-inserts'
+        ]
+        try:
+            process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            stdout, stderr = process.communicate()
+            if process.returncode != 0:
+                return HttpResponse(stderr, status=500, content_type='text/plain')
+            response = HttpResponse(stdout, content_type='application/sql')
+            response['Content-Disposition'] = f'attachment; filename="{filename}"'
+            return response
+        except Exception as e:
+            return HttpResponse(f"Error: {e}", status=500, content_type='text/plain')
+
 class RestoreTableAPIView(APIView):
-    """
-    Endpoint para restaurar una tabla específica.
-    """
+    permission_classes = [IsAdminUser]
+    parser_classes = (MultiPartParser, FormParser)
+    def post(self, request, *args, **kwargs):
+        file_obj = request.data.get('backup_file')
+        table_name = request.data.get('table_name')
+        if not file_obj or not table_name:
+            return Response({"error": "Faltan el archivo o el nombre de la tabla."}, status=status.HTTP_400_BAD_REQUEST)
+        temp_file_path = f'temp_restore_{table_name}.sql'
+        with open(temp_file_path, 'wb+') as temp_file:
+            for chunk in file_obj.chunks():
+                temp_file.write(chunk)
+        db = settings.DATABASES['default']
+        command = f"psql --dbname=postgresql://{db['USER']}:{db['PASSWORD']}@{db['HOST']}:{db['PORT']}/{db['NAME']} -f {temp_file_path}"
+        try:
+            subprocess.run(command, shell=True, check=True)
+            return Response({"detail": f"Tabla '{table_name}' restaurada exitosamente."}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": f"Error al restaurar la tabla: {e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# --- Vista para Resetear Contenido (MODIFICADA) ---
+class ResetDatabaseAPIView(APIView):
     permission_classes = [IsAdminUser]
 
     def post(self, request, *args, **kwargs):
-        table_name = request.data.get('table_name')
-        backup_file = request.data.get('backup_file')
-
-        if not table_name or not backup_file:
-            return Response({"error": "Debes especificar 'table_name' y 'backup_file'."}, status=status.HTTP_400_BAD_REQUEST)
-
         try:
-            buffer = io.StringIO()
-            call_command('restore_table', table_name, backup_file, stdout=buffer)
-            output = buffer.getvalue()
-            return Response({"detail": output}, status=status.HTTP_200_OK)
+            # Borra todos los usuarios que NO son superusuarios (admins)
+            # Gracias a 'on_delete=models.CASCADE', esto borrará en cascada:
+            # - El Perfil del usuario.
+            # - Todos los Progresos del usuario.
+            # - Todas las relaciones UsuarioLogro del usuario.
+            usuarios_a_borrar = Usuario.objects.filter(is_superuser=False)
+            count = usuarios_a_borrar.count()
+            usuarios_a_borrar.delete()
+            
+            return Response({
+                "detail": f"Reseteo completado. Se han eliminado {count} usuarios no administradores y todos sus datos asociados (perfiles, progresos, logros)."
+            }, status=status.HTTP_200_OK)
+            
         except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({"error": f"Error al resetear los datos: {e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
