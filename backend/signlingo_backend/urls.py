@@ -1,0 +1,53 @@
+# signlingo_backend/urls.py
+
+from django.contrib import admin
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from rest_framework_simplejwt.views import TokenRefreshView
+
+# Importa TODAS las vistas que necesitarás
+from lessons.views import MundoViewSet, CategoriaViewSet, MaterialDidacticoViewSet
+from rewards.views import RecompensaViewSet, ProgresoViewSet
+from users.views import (
+    UsuarioViewSet,
+    RolViewSet,
+    LogroViewSet,
+    UserCreateAPIView,
+    ExportUsersCSV,
+    MeAPIView,
+    CustomTokenObtainPairView,
+    UserStatsAPIView  # <-- Importa la vista de estadísticas
+)
+
+# Crea el router para las rutas automáticas
+router = DefaultRouter()
+router.register(r'mundos', MundoViewSet, basename='mundo')
+router.register(r'categorias', CategoriaViewSet, basename='categoria')
+router.register(r'materiales', MaterialDidacticoViewSet, basename='material')
+router.register(r'recompensas', RecompensaViewSet, basename='recompensa')
+router.register(r'progresos', ProgresoViewSet, basename='progreso')
+router.register(r'usuarios', UsuarioViewSet, basename='usuario')
+router.register(r'roles', RolViewSet, basename='rol')
+router.register(r'logros', LogroViewSet, basename='logro')
+
+
+# Define las URLs del proyecto en el orden correcto
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    
+    # --- Endpoints de Acciones Específicas (VAN PRIMERO) ---
+    path('api/v1/usuarios/crear/', UserCreateAPIView.as_view(), name='user-create'),
+    path('api/v1/export/users-csv/', ExportUsersCSV.as_view(), name='export-users-csv'),
+    path('api/v1/usuarios/me/', MeAPIView.as_view(), name='user-me'),
+    path('api/v1/usuarios/me/stats/', UserStatsAPIView.as_view(), name='user-stats'), # <-- AÑADIDA
+
+    # --- API de Datos (Rutas del Router, VA DESPUÉS) ---
+    path('api/v1/', include(router.urls)),
+    
+    # --- API de Gestión ---
+    path('api/management/', include('management.urls')),
+    
+    # --- Endpoints de Autenticación ---
+    path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+]

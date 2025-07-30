@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 
-// Importamos React Router DOM
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-
-// --- 1. Importar TODOS los componentes de página/vista REALES ---
+// --- Tus imports ---
+import { getMe } from './services/apiService';
 import MainPage from './pages/MainPage.jsx';
 import AboutPage from './pages/about/AboutPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
@@ -11,160 +10,82 @@ import SignupPage from './pages/SignupPage.jsx';
 import PasswordPage from './pages/PasswordPage.jsx';
 import AdminLayout from './components/admin/AdminLayout.jsx';
 import World from './pages/world/WorldSelect.jsx';
-import RewardModal  from './pages/game/RewardModal.jsx'
+import RewardModal from './pages/game/RewardModal.jsx';
 import VideosPage from './pages/material/videos/VideoPage.jsx';
 import InfoPage from './pages/material/info/InfoPage.jsx';
 import ProfilePage from './pages/profile/ProfilePage.jsx';
-
-//Mundos
 import CityPage from './pages/game/ciudad/CityPage.jsx';
 import CastlePage from './pages/game/castillo/CastlePage.jsx';
 import JunglaPage from './pages/game/jungla/JunglaPage.jsx';
 import LevelRouter from './pages/game/LevelRouter.jsx';
 
-function App() {
-  // Estado para guardar la información del usuario logueado. 'null' significa que no hay sesión iniciada.
-  const [user, setUser] = useState(null);
+const ProtectedRoute = ({ user, allowedRoles, children }) => {
+  if (!user) return <Navigate to="/login" replace />;
+  if (allowedRoles && user.rol && !allowedRoles.includes(user.rol.nombre)) {
+    return <Navigate to="/" replace />;
+  }
+  return children;
+};
 
-  // Función para manejar el login.
-  const handleLogin = (userData) => {
+function App() {
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const token = localStorage.getItem('accessToken');
+      if (token) {
+        try {
+          const response = await getMe();
+          setUser(response.data);
+        } catch (error) {
+          console.error("Token inválido, limpiando sesión.", error);
+          localStorage.clear();
+        }
+      }
+      setIsLoading(false);
+    };
+    checkAuth();
+  }, []);
+
+  const handleLoginSuccess = (userData) => {
     setUser(userData);
+    if (userData.rol && (userData.rol.nombre === 'Administrador' || userData.rol.nombre === 'Asesor')) {
+      navigate('/admin');
+    } else {
+      navigate('/world');
+    }
   };
 
+  // --- CAMBIO AQUÍ ---
+  // Si está cargando, no muestra nada en lugar del texto
+  if (isLoading) {
+    return null; 
+  }
+
   return (
-    <Router>
-      <Routes>
-        {/* --- Páginas públicas --- */}
-        <Route path="/" element={<MainPage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/password" element={<PasswordPage />} />
-        <Route path="/world" element={<World />} />
-        <Route path="/ciudad" element={<CityPage />} />
-        <Route path="/castillo" element={<CastlePage />} />
-        <Route path="/jungla" element={<JunglaPage />} />
-        <Route path="/level/:world/:id" element={<LevelRouter />} />
-        <Route path="/reward" element={<RewardModal  />} />
-        <Route path="/videos" element={<VideosPage  />} />
-        <Route path='/info' element={<InfoPage />} />
-        <Route path='/profile' element={<ProfilePage />} />
-
-        {/* --- Ruta protegida admin --- */}
-        <Route
-          path="/admin/*"
-          element={
-            user && (user.role === 'admin' || user.role === 'asesor') ? (
-              <AdminLayout />
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
-        />
-
-        {/* --- Rutas para estudiantes / juego --- */}
-        <Route
-          path="/world"
-          element={
-            user && user.role === 'estudiante' ? (
-              <World />
-            ) : (
-              <Navigate to="/world" replace />
-            )
-          }
-        />
-        <Route
-          path="/beach"
-          element={
-            user && user.role === 'estudiante' ? (
-              // <BeachPage />
-              <div>BeachPage placeholder</div> // Cambia esto cuando importes BeachPage
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
-        />
-        <Route
-          path="/ciudad"
-          element={
-            user && user.role === 'estudiante' ? (
-              <CityPage />
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
-        />
-        <Route
-          path="/jungla"
-          element={
-            user && user.role === 'estudiante' ? (
-              <JunglaPage />
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
-        />
-        <Route
-          path="/castillo"
-          element={
-            user && user.role === 'estudiante' ? (
-              <CastlePage />
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
-        />
-          
-
-        {/* Rutas de niveles */}
-      <Route
-        path="/level/:world/:id"
-        element={
-          user && user.role === 'estudiante' ? (
-            <LevelRouter />
-          ) : (
-            <Navigate to="/" replace />
-          )
-        }
-      />
-
-        <Route
-          path="/videos"
-          element={
-            user && user.role === 'estudiante' ? (
-              <VideosPage />
-            ) : (
-              <Navigate to="/videos" replace />
-            )
-          }
-        />
-
-        <Route
-          path="/info"
-          element={
-            user && user.role === 'estudiante' ? (
-              <InfoPage />
-            ) : (
-              <Navigate to="/info" replace />
-            )
-          }
-        />
-
-        <Route
-          path="/profile"
-          element={
-            user && user.role === 'estudiante' ? (
-              <InfoPage />
-            ) : (
-              <Navigate to="/profile" replace />
-            )
-          }
-        />
-
-        {/* Ruta por defecto: redirigir a inicio */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/" element={<MainPage />} />
+      <Route path="/about" element={<AboutPage />} />
+      <Route path="/login" element={<LoginPage onLoginSuccess={handleLoginSuccess} />} />
+      <Route path="/signup" element={<SignupPage />} />
+      <Route path="/password" element={<PasswordPage />} />
+      <Route path="/reward" element={<RewardModal />} />
+      
+      {/* Rutas Protegidas */}
+      <Route path="/admin/*" element={<ProtectedRoute user={user} allowedRoles={['Administrador', 'Asesor']}><AdminLayout user={user} /></ProtectedRoute>} />
+      <Route path="/world" element={<ProtectedRoute user={user}><World /></ProtectedRoute>} />
+      <Route path="/ciudad" element={<ProtectedRoute user={user}><CityPage /></ProtectedRoute>} />
+      <Route path="/castillo" element={<ProtectedRoute user={user}><CastlePage /></ProtectedRoute>} />
+      <Route path="/jungla" element={<ProtectedRoute user={user}><JunglaPage /></ProtectedRoute>} />
+      <Route path="/level/:world/:id" element={<ProtectedRoute user={user}><LevelRouter /></ProtectedRoute>} />
+      <Route path="/videos" element={<ProtectedRoute user={user}><VideosPage /></ProtectedRoute>} />
+      <Route path="/info" element={<ProtectedRoute user={user}><InfoPage /></ProtectedRoute>} />
+      <Route path="/profile" element={<ProtectedRoute user={user}><ProfilePage /></ProtectedRoute>} />
+      
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
 

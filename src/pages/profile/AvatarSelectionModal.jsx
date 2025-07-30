@@ -1,4 +1,6 @@
-export function AvatarSelectionModal({ onClose, onSelectAvatar, avatars, locked }) {
+import React from 'react';
+
+export default function AvatarSelectionModal({ onClose, onSelectAvatar, avatars, locked }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-lg w-full max-w-md">
@@ -12,20 +14,20 @@ export function AvatarSelectionModal({ onClose, onSelectAvatar, avatars, locked 
           </button>
         </div>
         <div className="grid grid-cols-4 gap-2 mb-4">
-          {avatars.map((src, idx) => (
+          {avatars.map((avatar) => (
             <img
-              key={idx}
-              src={src}
-              alt={`Avatar ${idx + 1}`}
+              key={avatar.id}
+              src={`/avatars/${avatar.url}`}
+              alt={avatar.nombre}
               className="cursor-pointer border-2 border-transparent hover:border-purple-500 rounded transition-transform hover:scale-105"
-              onClick={() => onSelectAvatar(src)}
+              onClick={() => onSelectAvatar(avatar.url)}
             />
           ))}
-          {locked.map((src, idx) => (
+          {locked.map((avatar, idx) => (
             <img
               key={`locked-${idx}`}
-              src={src}
-              alt="Locked"
+              src={`/avatars/${avatar.url}`}
+              alt="Avatar bloqueado"
               className="opacity-50 cursor-not-allowed"
             />
           ))}
@@ -34,5 +36,3 @@ export function AvatarSelectionModal({ onClose, onSelectAvatar, avatars, locked 
     </div>
   );
 }
-
-export default AvatarSelectionModal;
