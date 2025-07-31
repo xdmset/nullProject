@@ -69,7 +69,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "signlingo_db",
         "USER": "postgres",
-        "PASSWORD": "240525",
+        "PASSWORD": "Msiawy1087",
         "HOST": "127.0.0.1",
         "PORT": "5432",
         "OPTIONS": {

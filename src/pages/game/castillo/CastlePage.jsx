@@ -36,9 +36,9 @@ useEffect(() => {
   };
 
   const getFlagImage = (level) => {
-    if (completedLevels.includes(level)) return "/src/assets/game/banderas/BanderaVerde.png";
-    if (isUnlocked(level)) return "/src/assets/game/banderas/BanderaRoja.png";
-    return "/src/assets/game/banderas/BanderaGris.png";
+    if (completedLevels.includes(level)) return "/src/assets/game/icons-castillo/escudo1.png";
+    if (isUnlocked(level)) return "/src/assets/game/icons-castillo/escudo2.png";
+    return "/src/assets/game/icons-castillo/escudo3.png";
   };
 
 const handleCofreClick = () => {

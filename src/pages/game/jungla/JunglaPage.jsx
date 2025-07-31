@@ -36,9 +36,9 @@ useEffect(() => {
   };
 
   const getFlagImage = (level) => {
-    if (completedLevels.includes(level)) return "/src/assets/game/banderas/BanderaVerde.png";
-    if (isUnlocked(level)) return "/src/assets/game/banderas/BanderaRoja.png";
-    return "/src/assets/game/banderas/BanderaGris.png";
+    if (completedLevels.includes(level)) return "/src/assets/game/icons-jungla/jungla1.png";
+    if (isUnlocked(level)) return "/src/assets/game/icons-jungla/jungla2.png";
+    return "/src/assets/game/icons-jungla/jungla3.png";
   };
 
   const handleCofreClick = () => {

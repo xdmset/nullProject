@@ -36,9 +36,9 @@ useEffect(() => {
   };
 
   const getFlagImage = (level) => {
-    if (completedLevels.includes(level)) return "/src/assets/game/banderas/BanderaVerde.png";
-    if (isUnlocked(level)) return "/src/assets/game/banderas/BanderaRoja.png";
-    return "/src/assets/game/banderas/BanderaGris.png";
+    if (completedLevels.includes(level)) return "/src/assets/game/icons-ciudad/nivelActivo.png";
+    if (isUnlocked(level)) return "/src/assets/game/icons-ciudad/nivelInactivo.png";
+    return "/src/assets/game/icons-ciudad/nivelBloqueado.png";
   };
 
 const handleCofreClick = () => {
@@ -93,7 +93,7 @@ const cofreImage = `/src/assets/game/cofres/cofre${cofreLevel}.png`;
   return (
     <div
       className="min-h-screen bg-cover bg-center flex flex-col items-center justify-center relative"
-      style={{ backgroundImage: "url('/src/assets/game/icons-ciudad/CIUDAD.png')" }}
+      style={{ backgroundImage: "url('/src/assets/game/icons-ciudad/CityFondo.png')" }}
     >
       <div className="absolute bottom-10 w-full">
 

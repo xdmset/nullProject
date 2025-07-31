@@ -301,7 +301,7 @@ export default function CLevelScreen() {
         )}
 
         {lives === 0 && (
-          <LoseOverlay onRetry={restartLevel} onExit={() => navigate("/ciudad")} />
+          <LoseOverlay onRetry={restartLevel} onExit={() => navigate("/castillo")} />
         )}
 
         {showLevelComplete && (
