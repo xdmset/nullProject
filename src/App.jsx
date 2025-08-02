@@ -5,6 +5,7 @@ import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import { getMe } from './services/apiService';
 import MainPage from './pages/MainPage.jsx';
 import AboutPage from './pages/about/AboutPage.jsx';
+import BlogPage from './pages/blog/BlogPage.jsx'
 import LoginPage from './pages/LoginPage.jsx';
 import SignupPage from './pages/SignupPage.jsx';
 import PasswordPage from './pages/PasswordPage.jsx';
@@ -17,6 +18,7 @@ import ProfilePage from './pages/profile/ProfilePage.jsx';
 import CityPage from './pages/game/ciudad/CityPage.jsx';
 import CastlePage from './pages/game/castillo/CastlePage.jsx';
 import JunglaPage from './pages/game/jungla/JunglaPage.jsx';
+import BeachPage from './pages/game/playa/BeachPage.jsx';
 import LevelRouter from './pages/game/LevelRouter.jsx';
 
 const ProtectedRoute = ({ user, allowedRoles, children }) => {
@@ -68,6 +70,7 @@ function App() {
     <Routes>
       <Route path="/" element={<MainPage />} />
       <Route path="/about" element={<AboutPage />} />
+      <Route path="/blog" element={<BlogPage />} />
       <Route path="/login" element={<LoginPage onLoginSuccess={handleLoginSuccess} />} />
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/password" element={<PasswordPage />} />
@@ -79,6 +82,7 @@ function App() {
       <Route path="/ciudad" element={<ProtectedRoute user={user}><CityPage /></ProtectedRoute>} />
       <Route path="/castillo" element={<ProtectedRoute user={user}><CastlePage /></ProtectedRoute>} />
       <Route path="/jungla" element={<ProtectedRoute user={user}><JunglaPage /></ProtectedRoute>} />
+      <Route path="/playa" element={<ProtectedRoute user={user}><BeachPage /></ProtectedRoute>} />
       <Route path="/level/:world/:id" element={<ProtectedRoute user={user}><LevelRouter /></ProtectedRoute>} />
       <Route path="/videos" element={<ProtectedRoute user={user}><VideosPage /></ProtectedRoute>} />
       <Route path="/info" element={<ProtectedRoute user={user}><InfoPage /></ProtectedRoute>} />

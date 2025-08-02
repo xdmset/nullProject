@@ -78,7 +78,7 @@ const isLeftSide = (id) => {
   }, [activeZone]);
 
   const zones = [
-    { id: "playa", top: "bottom-[80px]", left: "left-[25%]", color: "#FFB84C", icon: iconPlaya, route: "/beach" },
+    { id: "playa", top: "bottom-[80px]", left: "left-[25%]", color: "#FFB84C", icon: iconPlaya, route: "/playa" },
     { id: "ciudad", top: "top-[120px]", left: "left-[25%]", color: "#6C757D", icon: iconCiudad, route: "/ciudad" },
     { id: "jungla", top: "top-[100px]", left: "left-[70%]", color: "#1FAB89", icon: iconJungla, route: "/jungla" },
     { id: "castillo", top: "bottom-[85px]", left: "left-[74%]", color: "#e9202a", icon: iconCastillo, route: "/castillo" },

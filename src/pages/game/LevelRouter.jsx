@@ -1,8 +1,8 @@
 import { useParams, Navigate } from 'react-router-dom';
 import JLevelScreen from './jungla/JLevelScreen';
-import LevelScreen from './ciudad/LevelScreen'; // para Playa
-import CLevelScreen from './castillo/CLevelScreen'; // para Ciudad
-// import TLevelScreen from './TLevelScreen'; // para Castillo (ejemplo)
+import LevelScreen from './ciudad/LevelScreen'; 
+import CLevelScreen from './castillo/CLevelScreen';
+import BLevelScreen from './playa/BLevelScreen'; 
 
 export default function LevelRouter() {
   const { world, id } = useParams();
@@ -14,8 +14,8 @@ export default function LevelRouter() {
     case 'ciudad':
       return <LevelScreen id={id} />;
 
-    // case 'ciudad':
-    //   return <CLevelScreen id={id} />;
+     case 'playa':
+       return <BLevelScreen id={id} />;
 
     case 'castillo':
       return <CLevelScreen id={id} />;

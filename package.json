@@ -19,6 +19,7 @@
     "react-pdf": "^10.0.1",
     "react-router-dom": "^7.7.1",
     "react-slick": "^0.29.0",
+    "react-xarrows": "^2.0.2",
     "slick-carousel": "^1.8.1",
     "swiper": "^11.2.10"
   },
