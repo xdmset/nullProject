@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from django.db import models
 
 class Categoria(models.Model):
@@ -13,11 +12,11 @@ class Mundo(models.Model):
 
 class Nivel(models.Model):
     mundo = models.ForeignKey(Mundo, related_name='niveles', on_delete=models.CASCADE)
-    nivel = models.IntegerField()
-    nombre = models.CharField(max_length=100, default="Lección")
+    nombre = models.CharField(max_length=100) # Se mantiene para claridad
+    # Campos actualizados
     descripcion = models.TextField(blank=True, null=True)
-    dificultad = models.CharField(max_length=50, blank=True)
-    def __str__(self): return f"{self.mundo.nombre} - Nivel {self.nivel}"
+    cantidad_ejercicio = models.IntegerField(default=0, verbose_name="Cantidad de Ejercicios")
+    def __str__(self): return f"{self.mundo.nombre} - {self.nombre}"
 
 class MaterialDidactico(models.Model):
     categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True)

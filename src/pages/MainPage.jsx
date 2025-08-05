@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // Helpers
 import AnimationRevealPage from '../helpers/AnimationRevealPage.jsx';
@@ -15,20 +16,19 @@ import PopularMainSection from '../components/landing/PopularMainSection.jsx';
 import TestimonyMainSection from '../components/landing/TestimonyMainSection.jsx';
 import FAQMainSection from '../components/landing/FAQMainSection.jsx';
 
-// Helper component to pass props, just like in the original file
-const HighlightedText = ({ children }) => <div className="text-primary-500">{children}</div>;
+export default function MainPage() {
+  const navigate = useNavigate(); // Hook para navegación
 
-
-export default function MainPage({ navigate }) {
   return (
     <AnimationRevealPage>
+      {/* Pasamos navigate como prop a los componentes que lo necesiten */}
       <LandingHeader navigate={navigate} />
       <StartMainSection navigate={navigate} />
       <ImpactMainSection />
-      <ValuesMainSection  />
-      <PopularMainSection/>
+      <ValuesMainSection />
+      <PopularMainSection />
       <TestimonyMainSection />
-      <FAQMainSection/>
+      <FAQMainSection />
       <LandingFooter />
     </AnimationRevealPage>
   );

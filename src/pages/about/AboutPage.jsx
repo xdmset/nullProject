@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // --- Rutas de importación corregidas ---
 // Ahora subimos dos niveles (../../) para llegar a la carpeta 'src'
@@ -12,7 +13,9 @@ import TeamAboutSection from '../../components/landing/TeamAboutSection.jsx';
 // Helper component to pass props
 const HighlightedText = ({ children }) => <span className="text-blue-500">{children}</span>;
 
-export default function AboutPage({ navigate }) {
+export default function AboutPage() {
+  const navigate = useNavigate(); // Hook para navegación
+
   return (
     <AnimationRevealPage>
       <LandingHeader navigate={navigate} />

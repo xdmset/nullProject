@@ -1,78 +1,111 @@
-import React, { useState } from 'react';
+  import React, { useState, useEffect } from 'react';
+  import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 
-// --- 1. Importar TODOS los componentes de página/vista REALES ---
-import MainPage from './pages/MainPage.jsx';
-import AboutPage from './pages/about/AboutPage.jsx';
-import LoginPage from './pages/LoginPage.jsx';
-import SignupPage from './pages/SignupPage.jsx';
-import PasswordPage from './pages/PasswordPage.jsx';
-import RewardPage from './pages/RewardPage.jsx';
-import AdminLayout from './components/admin/AdminLayout.jsx';
-import Mundos from './components/game/Mundos.jsx';
-import SignlingusGame from './components/game/SignlingusGame.jsx';
+  // Tus imports
+  import { getMe, logout } from './services/apiService';
+  import MainPage from './pages/MainPage.jsx';
+  import AboutPage from './pages/about/AboutPage.jsx';
+  import BlogPage from './pages/blog/BlogPage.jsx';
+  import LoginPage from './pages/LoginPage.jsx';
+  import SignupPage from './pages/SignupPage.jsx';
+  import PasswordPage from './pages/PasswordPage.jsx';
+  import AdminLayout from './components/admin/AdminLayout.jsx';
+  import World from './pages/world/WorldSelect.jsx';
+  import VideosPage from './pages/material/videos/VideoPage.jsx';
+  import InfoPage from './pages/material/info/InfoPage.jsx';
+  import ChatPage from './pages/material/ia/ChatPage.jsx';
+  import ProfilePage from './pages/profile/ProfilePage.jsx';
+  import CityPage from './pages/game/ciudad/CityPage.jsx';
+  import CastlePage from './pages/game/castillo/CastlePage.jsx';
+  import JunglaPage from './pages/game/jungla/JunglaPage.jsx';
+  import BeachPage from './pages/game/playa/BeachPage.jsx';
+  import LevelRouter from './pages/game/LevelRouter.jsx';
+  import SecretPage from './pages/game/secret/SecretPage.jsx';
 
-// --- 2. Componente Principal de la Aplicación (Router) ---
-function App() {
-  // Estado para saber qué página mostrar. Empezamos en 'home' (la página de inicio).
-  const [currentPage, setCurrentPage] = useState('home');
-  
-  // Estado para guardar la información del usuario logueado. 'null' significa que no hay sesión iniciada.
-  const [user, setUser] = useState(null);
-
-  // Función para cambiar de página. Se la pasaremos a los componentes hijos.
-  const navigate = (page) => {
-    setCurrentPage(page);
-  };
-
-  // Función para manejar el login.
-  const handleLogin = (userData) => {
-    setUser(userData);
-    // Lógica de redirección por rol
-    if (userData.role === 'estudiante') {
-      navigate('mundos');
-    } else if (userData.role === 'admin' || userData.role === 'asesor') {
-      navigate('admin');
+  const ProtectedRoute = ({ user, allowedRoles, children }) => {
+    if (!user) return <Navigate to="/login" replace />;
+    if (allowedRoles && user.rol && !allowedRoles.includes(user.rol.nombre)) {
+      return <Navigate to="/" replace />;
     }
+    return children;
   };
 
-  // Función para renderizar la página correcta según el estado.
-  const renderPage = () => {
-    switch (currentPage) {
-      // --- Flujo de Autenticación y Páginas Públicas ---
-      case 'login':
-        return <LoginPage onLogin={handleLogin} navigate={navigate} />;
-      case 'signup':
-        return <SignupPage navigate={navigate} />;
-      case 'password':
-        return <PasswordPage navigate={navigate} />;
-      case 'about':
-        return <AboutPage navigate={navigate} />;
-      
-      // --- Flujo de Administrador ---
-      case 'admin':
-        // En un futuro, aquí podrías añadir una comprobación: si el usuario no es admin, redirigir a login.
-        return <AdminLayout />;
-      
-      // --- Flujo del Juego para Estudiantes ---
-      case 'mundos':
-        return <Mundos navigate={navigate} />;
-      case 'game':
-        return <SignlingusGame navigate={navigate} />;
-      case 'reward':
-        return <RewardPage navigate={navigate} />;
+  function App() {
+    const [user, setUser] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+      const checkAuth = async () => {
+        const token = localStorage.getItem('accessToken');
+        if (token) {
+          try {
+            const response = await getMe();
+            setUser(response.data);
+          } catch (error) {
+            logout();
+          }
+        }
+        setIsLoading(false);
+      };
+      checkAuth();
+    }, []);
+
+    const handleLoginSuccess = (userData) => {
+      setUser(userData);
+      if (userData.rol && (userData.rol.nombre === 'Administrador' || userData.rol.nombre === 'Asesor')) {
+        navigate('/admin/dashboard');
+      } else {
+        navigate('/world');
+      }
+    };
+
+    const handleLogout = () => {
+      logout();
+      setUser(null);
+      navigate('/');
+    };
+
+    if (isLoading) {
+      return null;
+    }
+
+    return (
+      <Routes>
+        {/* Rutas Públicas */}
+        <Route path="/" element={<MainPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/blog" element={<BlogPage />} />
+        <Route path="/login" element={<LoginPage onLoginSuccess={handleLoginSuccess} />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/password" element={<PasswordPage />} />
         
-      // --- Página de Inicio por defecto ---
-      case 'home':
-      default:
-        return <MainPage navigate={navigate} />;
-    }
-  };
+        {/* --- RUTA PRINCIPAL PARA EL PANEL DE ADMIN --- */}
+        <Route 
+          path="/admin/*" // El '*' delega todas las sub-rutas a AdminLayout
+          element={
+            <ProtectedRoute user={user} allowedRoles={['Administrador', 'Asesor']}>
+              <AdminLayout user={user} onLogout={handleLogout} />
+            </ProtectedRoute>
+          } 
+        />
 
-  return (
-    <>
-      {renderPage()}
-    </>
-  );
-}
+        {/* --- Rutas Protegidas de Juego y Otras --- */}
+        <Route path="/world" element={<ProtectedRoute user={user}><World /></ProtectedRoute>} />
+        <Route path="/ciudad" element={<ProtectedRoute user={user}><CityPage /></ProtectedRoute>} />
+        <Route path="/castillo" element={<ProtectedRoute user={user}><CastlePage /></ProtectedRoute>} />
+        <Route path="/jungla" element={<ProtectedRoute user={user}><JunglaPage /></ProtectedRoute>} />
+        <Route path="/playa" element={<ProtectedRoute user={user}><BeachPage /></ProtectedRoute>} />
+        <Route path="/secret" element={<ProtectedRoute user={user}><SecretPage /></ProtectedRoute>} />
+        <Route path="/level/:world/:id" element={<ProtectedRoute user={user}><LevelRouter /></ProtectedRoute>} />
+        <Route path="/videos" element={<ProtectedRoute user={user}><VideosPage /></ProtectedRoute>} />
+        <Route path="/info" element={<ProtectedRoute user={user}><InfoPage /></ProtectedRoute>} />
+        <Route path="/chat" element={<ProtectedRoute user={user}><ChatPage /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute user={user}><ProfilePage /></ProtectedRoute>} />
+        
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    );
+  }
 
-export default App;
+  export default App;

@@ -1,81 +1,96 @@
 import React from "react";
 
 // --- Assets ---
-import AnimalsImage from "../../assets/animals.png";
-import SaludosImage from "../../assets/saludos.png";
-import FamilyImage from "../../assets/family.jpg";
+import AnimalsImage from "../../assets/pagina/animals.png";
+import SaludosImage from "../../assets/pagina/saludos.png";
+import FamilyImage from "../../assets/pagina/family.jpg";
 
-// --- Componente de la Sección de Secciones Populares ---
 export default function PopularMainSection() {
+  const heading = (
+    <>
+      Secciones <span className="text-primary-500">populares</span>
+    </>
+  );
+  const description =
+    "Aquí hay algunas de las secciones populares del sistema seleccionadas por profesionales.";
 
-    const heading = <>Secciones <span className="text-primary-500">populares</span></>;
-    const description = "Aquí hay algunos de las secciones populares del sistema seleccionados por profesionales.";
+  const cards = [
+    {
+      imageSrc: AnimalsImage,
+      subtitle: "Mascotas",
+      title: "Animales",
+      description:
+        "Conoce distintas especies, sus nombres y características. En el sistema puedes identificar animales domésticos y salvajes con actividades divertidas.",
+      url: "https://www.youtube.com/watch?v=H16vT56UKzs",
+    },
+    {
+      imageSrc: SaludosImage,
+      subtitle: "Cortesía",
+      title: "Saludos",
+      description:
+        "Aprende expresiones básicas como hola, buenos días y adiós. Con ejemplos y juegos según el momento del día para usarlos correctamente.",
+      url: "https://www.youtube.com/watch?v=PCHx3s-cwLU",
+    },
+    {
+      imageSrc: FamilyImage,
+      subtitle: "Exclusivo",
+      title: "Familia",
+      description:
+        "Identifica a mamá, papá, hermanos y abuelos. Reconoce sus roles con imágenes y actividades que enseñan respeto y unión familiar.",
+      url: "https://www.youtube.com/watch?v=TzfEPqQtYFc",
+    },
+  ];
 
-    // --- ¡CAMBIO CLAVE AQUÍ! ---
-    // Se restauraron las URLs originales de YouTube.
-    const cards = [
-        {
-            imageSrc: AnimalsImage,
-            subtitle: "Mascotas",
-            title: "Animales",
-            description: "El tema de los animales ayuda a conocer distintas especies, sus nombres, características. En el sistema a través de actividades intuitivas, los usuarios pueden identificar animales domésticos y salvajes y realizar actividades de asociación y clasificación.",
-            url: "https://www.youtube.com/watch?v=H16vT56UKzs"
-        },
-        {
-            imageSrc: SaludosImage,
-            subtitle: "Cortesía",
-            title: "Saludos",
-            description: "Los saludos se trabajan para que los usuarios aprendan expresiones básicas de cortesía, como hola, buenos días, buenas noches y adiós. El sistema muestra ejemplos según el momento del día y ofrece ejercicios interactivos para practicar su uso correcto.",
-            url: "https://www.youtube.com/watch?v=PCHx3s-cwLU"
-        },
-        {
-            imageSrc: FamilyImage,
-            subtitle: "Exclusivo",
-            title: "Familia",
-            description: "La familia es el tema que enseña a identificar y nombrar a sus diferentes miembros, como mamá, papá, hermanos y abuelos. El sistema permite reconocer sus relaciones y roles a través de imágenes, palabras y actividades que refuerzan el respeto y la unión familiar.",
-            url: "https://www.youtube.com/watch?v=TzfEPqQtYFc"
-        }
-    ];
+  return (
+  <div className="relative my-12 px-4 lg:px-12 overflow-hidden">
+    {/* Burbujas decorativas */}
+    <div className="absolute inset-0 z-0 pointer-events-none">
+      <div className="absolute w-32 h-32 bg-primary-700 rounded-full opacity-20 animate-ping top-0 left-10"></div>
+      <div className="absolute w-20 h-20 bg-primary-500 rounded-full opacity-20 animate-ping bottom-0 right-16"></div>
+    </div>
 
-    return (
-        <div className="relative">
-            <div className="max-w-screen-xl mx-auto py-20 lg:py-24">
-                <div className="flex flex-col items-center">
-                    <h2 className="text-3xl sm:text-4xl font-black text-center">{heading}</h2>
-                    <p className="mt-4 font-medium text-gray-600 text-center max-w-sm">{description}</p>
-                </div>
+    <div className="max-w-7xl mx-auto text-center relative z-10">
+        <h2 className="text-4xl sm:text-5xl font-black">{heading}</h2>
+        <p className="mt-4 text-gray-600 font-medium max-w-2xl mx-auto">{description}</p>
+      </div>
 
-                <div className="mt-16">
-                    {cards.map((card, i) => (
-                        <div 
-                            key={i} 
-                            className={`mt-24 md:flex justify-center items-center ${i % 2 === 1 ? 'flex-row-reverse' : 'flex-row'}`}
-                        >
-                            <div 
-                                className="rounded md:w-1/2 lg:w-5/12 xl:w-1/3 flex-shrink-0 h-80 md:h-144 bg-contain bg-center bg-no-repeat mx-4 sm:mx-8 md:mx-4 lg:mx-8"
-                                style={{ backgroundImage: `url("${card.imageSrc}")` }}
-                            ></div>
-                            
-                            <div className="mt-4 md:mt-0 md:max-w-md mx-4 sm:mx-8 md:mx-4 lg:mx-8">
-                                <div className="font-bold tracking-wide text-gray-500">{card.subtitle}</div>
-                                <h4 className="text-3xl font-bold text-gray-900">{card.title}</h4>
-                                <p className="mt-2 text-sm leading-loose text-gray-600">{card.description}</p>
-                                
-                                {/* --- ¡CAMBIO CLAVE AQUÍ! --- */}
-                                {/* El enlace ahora abre la URL en una nueva pestaña. */}
-                                <a 
-                                    href={card.url}
-                                    target="_blank" 
-                                    rel="noopener noreferrer"
-                                    className="inline-block mt-4 text-sm text-blue-500 font-bold cursor-pointer transition duration-300 border-b-2 border-transparent hover:border-blue-500"
-                                >
-                                    Más información
-                                </a>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+      <div className="mt-16 flex flex-col gap-20">
+        {cards.map((card, i) => (
+          <div
+            key={i}
+            className={`flex flex-col-reverse md:flex-row ${
+              i % 2 === 1 ? "md:flex-row-reverse" : ""
+            } items-center gap-8 md:gap-12 group`}
+          >
+            {/* Imagen con efecto flotante */}
+            <div className="relative w-full md:w-1/2 rounded-3xl overflow-hidden shadow-xl transform transition duration-500 hover:scale-105">
+              <img
+                src={card.imageSrc}
+                alt={card.title}
+                className="object-cover w-full h-64 md:h-96 rounded-3xl"
+              />
             </div>
-        </div>
-    );
-};
+
+            {/* Contenido */}
+            <div className="w-full md:w-1/2 px-4">
+              <span className="text-sm uppercase text-primary-500 font-bold tracking-wide">
+                {card.subtitle}
+              </span>
+              <h3 className="mt-2 text-3xl font-extrabold text-gray-800">{card.title}</h3>
+              <p className="mt-4 text-gray-600 text-md leading-relaxed">{card.description}</p>
+
+              <a
+                href={card.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block mt-6 bg-primary-500 text-white px-6 py-2 rounded-full font-semibold text-sm shadow-lg hover:bg-primary-700 transition duration-300"
+              >
+                Ver más
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

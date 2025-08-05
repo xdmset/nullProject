@@ -1,104 +1,102 @@
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import useAnimatedNavToggler from "../../hooks/useAnimatedNavToggler.jsx";
 import logo from "../../assets/logo.png";
+import Menu from "../../assets/icons/burger-menu.png";
+import Close from "../../assets/icons/remove.png";
 
-// --- Iconos en formato de componente React ---
+// Iconos
 const MenuIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-  </svg>
+  <img src={Menu} alt="Menu Icon" className="h-6 w-6" />
 );
-
 const CloseIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-  </svg>
+  <img src={Close} alt="Close Icon" className="h-6 w-6" />
 );
 
-
-// --- Componente del Header ---
 export default function LandingHeader({ navigate }) {
   const { showNavLinks, animation, toggleNavbar } = useAnimatedNavToggler();
 
-  const navLinks = [
-    { text: "Inicio", action: () => navigate('home') },
-    { text: "Nosotros", action: () => navigate('about') },
-    { text: "Blog", action: () => navigate('blog') },
-    { text: "Iniciar sesión", action: () => navigate('login'), isSecondary: true },
-    { text: "¡Regístrate!", action: () => navigate('signup'), isPrimary: true },
-  ];
+const navLinks = [
+  { text: "Inicio", action: () => navigate('/') },
+  { text: "Nosotros", action: () => navigate('/about') },
+  { text: "Blog", action: () => navigate('/blog') },
+  { text: "Iniciar sesión", action: () => navigate('/login'), isSecondary: true },
+  { text: "¡Regístrate!", action: () => navigate('/signup'), isPrimary: true },
+];
+
 
   const LogoLink = () => (
-    <a href="#" onClick={(e) => { e.preventDefault(); navigate('home'); }} className="flex items-center font-black text-gray-800">
-      <img src={logo} alt="logo" className="w-10 mr-3" />
+    <a href="#" onClick={(e) => { e.preventDefault(); navigate('home'); }} className="flex items-center font-black text-white hover:scale-105 transition-transform duration-300">
+      <img src={logo} alt="logo" className="w-12 mr-3 drop-shadow-xl hover:rotate-6 transition-transform duration-300" />
       <div className="flex flex-col leading-none">
         <span className="text-2xl font-black">SIGNLINGUS</span>
-        <span className="text-sm font-normal text-white-600">Para oídos callados... manos parlantes</span>
+        <span className="text-sm font-light tracking-wide text-white">Manos parlantes, mentes brillantes</span>
       </div>
     </a>
   );
 
-return (
-  <div className="relative bg-primary-500 text-gray-100 w-full px-6 py-6 sm:py-8 overflow-hidden">
-    <div className="max-w-screen-xl mx-auto relative z-5">
-      <header className="flex justify-between items-center w-full">
-        {/* Menú de escritorio */}
-        <nav className="hidden lg:flex flex-1 justify-between items-center">
-          <LogoLink />
-          <div className="flex items-center space-x-8">
-            {navLinks.map((link, index) => (
-              <a
-                key={index}
-                href="#"
-                onClick={(e) => { e.preventDefault(); link.action(); }}
-                className={`
-                  text-lg my-2 lg:text-sm lg:mx-6 lg:my-0 font-semibold tracking-wide transition duration-300 pb-1 border-b-2
-                  ${link.isPrimary
-                    ? 'flex items-center justify-center px-6 py-2 rounded-lg bg-white text-primary-500 hover:bg-gray-100 border-b-0'
-                    : 'flex items-center border-transparent text-gray-100 hover:border-white hover:text-white'}
-                  ${link.isSecondary ? 'lg:ml-12' : ''}
-                `}
-              >
-                {link.text}
-              </a>
-            ))}
-          </div>
-        </nav>
-
-        {/* Menú móvil */}
-        <nav className="lg:hidden flex flex-1 items-center justify-between">
-          <LogoLink />
-          <button
-            onClick={toggleNavbar}
-            className="z-20 focus:outline-none hover:text-white transition duration-300"
-          >
-            {showNavLinks ? <CloseIcon /> : <MenuIcon />}
-          </button>
-          <motion.div
-            initial={{ x: "150%", display: "none" }}
-            animate={animation}
-            className="z-10 fixed top-0 inset-x-0 mx-4 my-6 p-8 border text-center rounded-lg text-gray-900 bg-white shadow-lg"
-          >
-            <div className="flex flex-col items-center space-y-6">
+  return (
+    <div className="relative bg-gradient-to-r from-[#005EB8] via-[#412DB2] to-[#7DF9FF] text-white w-full px-6 py-6 sm:py-8 rounded-b-3xl shadow-md shadow-purple-500/40">
+      <div className="max-w-screen-xl mx-auto relative z-10">
+        <header className="flex justify-between items-center w-full">
+          {/* Menú escritorio */}
+          <nav className="hidden lg:flex flex-1 justify-between items-center">
+            <LogoLink />
+            <div className="flex items-center space-x-6">
               {navLinks.map((link, index) => (
                 <a
                   key={index}
                   href="#"
                   onClick={(e) => { e.preventDefault(); link.action(); }}
                   className={`
-                    text-lg font-semibold tracking-wide
-                    ${link.isPrimary ? 'w-full text-center px-8 py-3 rounded-lg bg-primary-500 text-gray-100 hover:bg-primary-700' : ''}
+                    text-lg font-semibold tracking-wide transition-all duration-300 transform
+                    ${link.isPrimary
+                      ? 'px-6 py-2 bg-white text-[#412DB2] rounded-full shadow-md hover:bg-[#f8f2ff] hover:scale-105'
+                      : 'hover:text-[#f8f2ff] hover:scale-105'}
+                    ${link.isSecondary ? 'ml-8 underline decoration-dotted' : ''}
                   `}
                 >
                   {link.text}
                 </a>
               ))}
             </div>
-          </motion.div>
-        </nav>
-      </header>
+          </nav>
+
+          {/* Menú móvil */}
+          <nav className="lg:hidden flex flex-1 items-center justify-between">
+            <LogoLink />
+            <button
+              onClick={toggleNavbar}
+              className="z-20 focus:outline-none hover:text-[#f8f2ff] transition duration-300"
+            >
+              {showNavLinks ? <CloseIcon /> : <MenuIcon />}
+            </button>
+            <motion.div
+              initial={{ x: "150%", display: "none" }}
+              animate={animation}
+              className="z-10 fixed top-0 inset-x-0 mx-4 my-6 p-8 rounded-3xl text-gray-900 bg-white shadow-2xl border-2 border-[#412DB2]"
+            >
+              <div className="flex flex-col items-center space-y-6">
+                {navLinks.map((link, index) => (
+                  <a
+                    key={index}
+                    href="#"
+                    onClick={(e) => { e.preventDefault(); link.action(); }}
+                    className={`
+                      text-lg font-semibold transition duration-300 transform hover:scale-105
+                      ${link.isPrimary
+                        ? 'w-full text-center px-6 py-3 rounded-full bg-gradient-to-r from-[#7DF9FF] to-[#412DB2] text-white shadow-md'
+                        : 'text-[#412DB2] hover:text-[#229FA9]'}
+                    `}
+                  >
+                    {link.text}
+                  </a>
+                ))}
+              </div>
+            </motion.div>
+          </nav>
+        </header>
+      </div>
     </div>
-  </div>
-);
+  );
 }

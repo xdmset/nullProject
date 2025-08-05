@@ -1,48 +1,83 @@
 import React from "react";
+import { motion } from "framer-motion";
 
-// --- Componente de la Sección de Impacto ---
+// --- Íconos o imágenes (puedes usar imágenes si tienes otras) ---
+import FamilyIcon from "../../assets/icons/family.png";
+import KidsIcon from "../../assets/icons/kids.png";
+import SchoolIcon from "../../assets/icons/school.png";
+
 export default function ImpactMainSection() {
-    
-    // Datos para la sección, igual que en tu componente original
-    const subheading = "";
-    const heading = "Más de 3,000 sonrisas nuevas.";
-    const description = "Cada niño que aprende LSM abre un mundo de posibilidades y entendimiento.";
-    const stats = [
-        {
-            key: "Familias",
-            value: "800+",
-        },
-        {
-            key: "Niños",
-            value: "1500+",
-        },
-        {
-            key: "Escuelas",
-            value: "200+",
-        },
-    ];
+  const heading = "Más de 3,000 sonrisas nuevas.";
+  const description = "Cada niño que aprende LSM abre un mundo de posibilidades y entendimiento.";
 
-    return (
-        // Usamos clases de Tailwind directamente. Asumimos que 'bg-primary-900' es un azul oscuro.
-        <div className="my-8 lg:my-10 bg-primary-500 text-gray-100 -mx-8 px-8">
-            <div className="max-w-screen-xl mx-auto py-16 lg:py-20">
-                {/* Contenedor del Encabezado */}
-                <div>
-                    {subheading && <h3 className="text-gray-100 text-center font-semibold uppercase tracking-widest">{subheading}</h3>}
-                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-center">{heading}</h2>
-                    {description && <p className="text-gray-400 text-center mx-auto max-w-screen-md mt-4">{description}</p>}
-                </div>
+  const stats = [
+    {
+      key: "Familias",
+      value: "800+",
+      icon: FamilyIcon,
+      bg: "bg-primary-300",
+    },
+    {
+      key: "Niños",
+      value: "1500+",
+      icon: KidsIcon,
+      bg: "bg-primary-200",
+    },
+    {
+      key: "Escuelas",
+      value: "200+",
+      icon: SchoolIcon,
+      bg: "bg-primary-900",
+    },
+  ];
 
-                {/* Contenedor de las Estadísticas */}
-                <div className="mt-8 flex flex-col sm:flex-row items-center justify-center flex-wrap max-w-screen-md justify-between mx-auto">
-                    {stats.map((stat, index) => (
-                        <div key={index} className="flex flex-col text-center p-4 tracking-wide">
-                            <span className="text-4xl sm:text-3xl md:text-4xl lg:text-5xl font-black">{stat.value}</span>
-                            <span className="text-xl font-medium">{stat.key}</span>
-                        </div>
-                    ))}
-                </div>
-            </div>
+  return (
+    <div className="relative bg-gradient-to-br from-primary-500 via-primary-700 to-primary-900 text-white py-16 lg:py-24 px-6 rounded-3xl mx-4 shadow-xl border-4 border-white/10 overflow-hidden">
+      {/* Fondo decorativo con burbujas animadas */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute w-40 h-40 bg-primary-200 rounded-full opacity-20 animate-ping top-0 left-10"></div>
+        <div className="absolute w-24 h-24 bg-primary-300 rounded-full opacity-20 animate-ping bottom-0 right-16"></div>
+      </div>
+
+      <div className="relative z-10 max-w-screen-xl mx-auto text-center">
+        <motion.h2
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-4xl sm:text-5xl font-black"
+        >
+          {heading}
+        </motion.h2>
+
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-lg text-primary-200 max-w-2xl mx-auto mt-4 font-medium"
+        >
+          {description}
+        </motion.p>
+
+        {/* Estadísticas animadas */}
+        <div className="mt-12 flex flex-col sm:flex-row justify-center items-center gap-8 flex-wrap">
+          {stats.map((stat, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: index * 0.2 }}
+              viewport={{ once: true }}
+              className={`rounded-2xl shadow-lg p-6 w-52 flex flex-col items-center ${stat.bg} text-gray-900 hover:scale-105 transition-transform duration-300`}
+            >
+              <img src={stat.icon} alt={stat.key} className="w-12 h-12 mb-3" />
+              <span className="text-3xl font-extrabold">{stat.value}</span>
+              <span className="text-lg font-semibold">{stat.key}</span>
+            </motion.div>
+          ))}
         </div>
-    );
-};
+      </div>
+    </div>
+  );
+}
