@@ -133,6 +133,7 @@ export default function LevelScreen() {
         } else {
             setTimeout(() => {
                 setCurrent(prev => prev + 1);
+                setSelectedOption("");
                 setFeedback({ message: "", type: "" });
             }, 1000);
         }
@@ -169,11 +170,11 @@ export default function LevelScreen() {
         setShowLevelComplete(false);
     };
 
-    const checkAnswer = () => {
-        if (!selectedOption || lives <= 0) return;
-        handleAnswer(selectedOption);
-        setSelectedOption(null);
-    };
+const checkAnswer = (isCorrect) => {
+  if (lives <= 0) return;
+  isCorrect ? handleCorrectAnswer() : handleWrongAnswer();
+};
+
 
     return (
         <div
