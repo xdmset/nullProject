@@ -411,8 +411,8 @@ export const exercises = {
       context: "Selecciona el color y el número que representa esta imagen",
       questionImage: "/src/assets/game/icons-ciudad/nivel4/cincoMorado.png",
       correctAnswers: {
-        colorImage: "/src/assets/game/icons-ciudad/color/cinco.png",
-        numberImage: "/src/assets/game/icons-ciudad/numeros/morado.png"
+        colorImage: "/src/assets/game/icons-ciudad/color/morado.png",
+        numberImage: "/src/assets/game/icons-ciudad/numeros/cinco.png"
       },
       options: {
         colorImages: [
