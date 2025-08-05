@@ -179,7 +179,7 @@ const checkAnswer = (isCorrect) => {
     return (
         <div
             className="relative min-h-screen bg-cover bg-center"
-            style={{ backgroundImage: "url('/fondos/City.png')" }}
+            style={{ backgroundImage: "url('/src/assets/game/icons-ciudad/City2.png')" }}
         >
             <div className="fixed top-0 left-0 right-0 z-50">
                 <Header progress={(current + 1) / levelExercises.length} lives={lives} />
@@ -216,7 +216,7 @@ const checkAnswer = (isCorrect) => {
                     )}
                 </div>
                 {feedback.message && <FeedbackMessage message={feedback.message} type={feedback.type} />}
-                {lives > 0 && currentExercise?.type !== "dual" && (
+                {lives > 0 && currentExercise?.type === "text" && (
                     <button
                         onClick={checkAnswer}
                         disabled={!selectedOption || isChecking}
