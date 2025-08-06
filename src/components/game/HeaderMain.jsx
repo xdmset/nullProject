@@ -49,22 +49,25 @@ export default function HeaderMain() {
     <div className="relative bg-gradient-to-r from-[#005EB8] via-[#198E94] to-[#3D3D97] text-white w-full px-6 py-2 sm:py-3  shadow-md shadow-purple-500/40 z-50">
       <div className="max-w-screen-xl mx-auto flex justify-between items-center">
         {/* Logo */}
-        <button
-          onClick={() => navigate("/home")}
-          className="flex items-center font-black text-white hover:scale-105 transition-transform duration-300"
-        >
+        <header className="flex items-center px-4 py-0">
+          {/* Logo a la izquierda */}
           <img
             src={logo}
             alt="logo"
             className="w-10 mr-3 drop-shadow-xl hover:rotate-6 transition-transform duration-300"
           />
-          <div className="flex flex-col leading-tight">
+
+          {/* Texto a la izquierda */}
+          <div className="flex flex-col leading-tight px-1">
             <span className="text-xl sm:text-2xl font-black">SIGNLINGUS</span>
             <span className="text-xs sm:text-sm font-light tracking-wide">
-              Para oidos callados, Manos parlantes...
+              Para oídos callados, Manos parlantes...
             </span>
           </div>
-        </button>
+        </header>
+
+
+
 
         {/* Información del usuario y botón perfil */}
         <div className="flex items-center gap-3">
@@ -190,18 +193,6 @@ export default function HeaderMain() {
                     Ver Perfil
                   </button>
                   
-                  <button
-                    onClick={() => {
-                      setIsProfileOpen(false);
-                      navigate("/world");
-                    }}
-                    className="flex items-center gap-3 w-full text-left px-4 py-3 hover:bg-gray-50 transition-colors font-medium text-gray-700"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064" />
-                    </svg>
-                    Ir al Mundo
-                  </button>
                   
                   <div className="border-t border-gray-100">
                     <button
