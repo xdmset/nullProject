@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import LandingHeader from '../../components/game/HeaderMain';
-import { getContenido, getCurrentUserProgress } from "../../services/apiService";
+import { getContenido, getUserProgress } from "../../services/apiService";
 
 // Assets
 import mapa from "../../assets/mapa/MapaMenu.png";
@@ -13,7 +13,7 @@ import iconCastillo from "../../assets/mapa/CastleIcon.png";
 import iconPregunta from "../../assets/mapa/iconPregunta.png";
 import Video from '../../assets/icons/video.png';
 import Info from '../../assets/icons/book.png';
-import Chat from '../../assets/icons/book.png';
+import Sabio from '../../assets/icons/SabioIcon.png';
 
 const WorldSelect = () => {
   const navigate = useNavigate();
@@ -28,17 +28,13 @@ const WorldSelect = () => {
       try {
         const [worldsResponse, progressResponse] = await Promise.all([
           getContenido(),
-          getCurrentUserProgress()
+          getUserProgress()
         ]);
         
         setWorlds(worldsResponse.data);
 
-        // --- CORRECCIÓN CLAVE AQUÍ ---
-        // Se usa 'prog.mundo.nombre' como clave para el mapa de progreso
         const progressMap = progressResponse.data.reduce((acc, prog) => {
-          if (prog.mundo && prog.mundo.nombre) {
-            acc[prog.mundo.nombre] = prog;
-          }
+          acc[prog.mundo] = prog;
           return acc;
         }, {});
         setProgress(progressMap);
@@ -72,12 +68,18 @@ const WorldSelect = () => {
 
   const playSoundForWorld = (id) => {
     switch (id) {
-      case 1: createTone(440, 0.2); break;
-      case 2: createTone(349.23, 0.2); break;
-      case 3: createTone(261.63, 0.2); break;
-      case 4: createTone(392, 0.2); break;
-      case 5: createTone(220, 0.2); setTimeout(() => createTone(110, 0.2), 200); break;
-      default: break;
+      case 1: // Playa
+        createTone(440, 0.2); break;
+      case 2: // Ciudad
+        createTone(349.23, 0.2); break;
+      case 3: // Jungla
+        createTone(261.63, 0.2); break;
+      case 4: // Castillo
+        createTone(392, 0.2); break;
+      case 5: // Misterioso
+        createTone(220, 0.2); setTimeout(() => createTone(110, 0.2), 200); break;
+      default:
+        break;
     }
   };
 
@@ -94,12 +96,7 @@ const WorldSelect = () => {
     { id: 5, name: "Mundo Misterioso", top: "bottom-[130px]", left: "left-[10%]", color: "#5c584c", icon: iconPregunta, route: "/secret", size: "w-[30px] h-[30px]" }
   ];
 
-  const menuButtons = [
-    { icon: Video, label: "Videos\nde Apoyo", route: "/videos" },
-    { icon: Info, label: "Información\nImportante", route: "/info" },
-    { icon: Chat, label: "Chat\nIA", route: "/chat" }
-  ];
-
+  // Si está cargando, no muestra nada en lugar del texto
   if (isLoading) {
     return null;
   }
@@ -113,14 +110,12 @@ const WorldSelect = () => {
 
           {zones.map(({ id, top, left, color, icon, route, size, name }) => {
             const worldData = worlds.find(w => w.id === id);
-            // --- CORRECCIÓN CLAVE AQUÍ ---
-            // Se busca el progreso usando el 'name' de la zona (ej. "Playa")
-            const worldProgress = progress[name];
+            const worldProgress = progress[id];
             
             return (
               <div key={id} className="relative">
                 <div
-                  className={`absolute ${top} ${left} ${size || "w-[60px] h-[60px]"} border-[3px] border-[#1f2020] rounded-[50%_50%_50%_0] transform rotate-[-45deg] flex items-center justify-center shadow-md hover:scale-[1.15] transition-all cursor-pointer z-20`}
+                  className={`absolute ${top} ${left} ${size || "w-[60px] h-[60px]"} bg-[${color}] border-[3px] border-[#1f2020] rounded-[50%_50%_50%_0] transform rotate-[-45deg] flex items-center justify-center shadow-md hover:scale-[1.15] transition-all cursor-pointer z-20`}
                   style={{ backgroundColor: color }}
                   onClick={() => {
                     playSoundForWorld(id);
@@ -130,7 +125,7 @@ const WorldSelect = () => {
                   onMouseLeave={() => setActiveZone(null)}
                 >
                   <div className="w-[80%] h-[80%] rounded-full overflow-hidden flex items-center justify-center transform rotate-[45deg]">
-                    <img src={icon} alt={id.toString()} className="w-full h-full object-contain" />
+                    <img src={icon} alt={id} className="w-full h-full object-contain" />
                   </div>
                 </div>
 
@@ -141,7 +136,7 @@ const WorldSelect = () => {
                   >
                     <h3 className="text-center font-bold text-lg mb-2">{worldData?.nombre || name}</h3>
                     <p className="text-sm my-1">Niveles Completados: {worldProgress?.niveles_completados || 0}</p>
-                    <p className="text-sm my-1">% de Terminación: {Math.round(parseFloat(worldProgress?.porcentaje_avance)) || 0}%</p>
+                    <p className="text-sm my-1">% de Terminación: {worldProgress?.porcentaje_avance || 0}%</p>
                   </div>
                 )}
               </div>
@@ -150,20 +145,49 @@ const WorldSelect = () => {
         </div>
       </div>
       
-      <div className="absolute top-1/2 left-6 -translate-y-1/2 flex flex-col gap-8 z-40">
-        {menuButtons.map(({ icon, label, route }, index) => (
-          <button
-            key={index}
-            onClick={() => {
-              playButtonSound();
-              navigate(route);
-            }}
-            className="relative flex items-center px-5 py-5 w-[260px] h-[130px] bg-primary-700 text-white text-[18px] font-semibold rounded-[2rem] shadow-lg cursor-pointer transition-transform transform hover:scale-105 hover:shadow-xl animate-jump"
-          >
-            <img src={icon} alt="icon" className="w-[56px] h-[56px] mr-4" />
-            <span className="text-left leading-tight whitespace-pre-line font-bold text-[16px]">{label}</span>
-          </button>
-        ))}
+      {/* AQUÍ ES DONDE SE REEMPLAZA - Nuevos botones de menú con el estilo actualizado */}
+      <div className="absolute top-[150px] left-[-50px] flex flex-col gap-10 z-50">
+        <button 
+          onClick={() => {
+            playButtonSound();
+            navigate("/videos");
+          }}
+          className="relative flex items-center gap-3 px-6 py-4 w-[260px] h-[150px] bg-[#4B8CC5] text-white text-[16px] font-semibold rounded-[10px] shadow-md cursor-pointer transition-all hover:bg-[#3a6fa3] hover:translate-x-1"
+          style={{ clipPath: "polygon(0 0, 92% 0, 80% 50%, 92% 100%, 0 100%)" }}
+        >
+          <div className="flex flex-col items-center justify-center w-full h-full gap-2 text-center">
+            <img src={Video} alt="video" className="w-[28px] h-[28px]" />
+            <span className="text-white font-bold leading-tight">Videos de<br />Apoyo</span>
+          </div>
+        </button>
+        
+        <button
+          onClick={() => {
+            playButtonSound();
+            navigate("/chat");
+          }}
+          className="relative flex items-center gap-3 px-6 py-4 w-[260px] h-[150px] bg-[#4B8CC5] text-white text-[16px] font-semibold rounded-[10px] shadow-md cursor-pointer transition-all hover:bg-[#3a6fa3] hover:translate-x-1"
+          style={{ clipPath: "polygon(0 0, 92% 0, 80% 50%, 92% 100%, 0 100%)" }}
+        >
+          <div className="flex flex-col items-center justify-center w-full h-full gap-2 text-center">
+            <img src={Sabio} alt="chat" className="w-[50px] h-[55px]" />
+            <span className="text-white font-bold leading-tight">Chatbot</span>
+          </div>
+        </button>
+        
+        <button 
+          onClick={() => {
+            playButtonSound();
+            navigate("/info");
+          }}
+          className="relative flex items-center gap-40 px-6 py-4 w-[260px] h-[150px] bg-[#4B8CC5] text-white text-[16px] font-semibold rounded-l-[10px] shadow-md cursor-pointer transition-all hover:bg-[#3a6fa3] hover:translate-x-1"
+          style={{ clipPath: "polygon(0 0, 92% 0, 80% 50%, 92% 100%, 0 100%)" }}
+        >
+          <div className="flex flex-col items-center justify-center w-full h-full gap-5 text-center">
+            <img src={Info} alt="info" className="w-[28px] h-[28px]" />
+            <span className="text-white font-bold leading-tight">Información<br />Importante</span>
+          </div>
+        </button>
       </div>
     </div>
   );

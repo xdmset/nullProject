@@ -117,8 +117,8 @@ pantalla1: [
       TwentyThree, // 23
       Forty  // 40
     ],
-    letters: ["23", "34", "40"],
-    correctOrder: ["40", "34", "23"]
+    letters: [ "35", "23", "40"],
+    correctOrder: ["40", "35", "23"]
   },
   {
     id: 9,
@@ -161,9 +161,9 @@ pantalla1: [
     type: "match",
     prompt: "Relaciona animales marinos con sus señas",
     pairs: [
-      { image: Tiburon, letter: "Tiburón" },
-      { image: Calamar, letter: "Pulpo" },
-      { image: Delfin, letter: "Delfín" }
+      {id:"imgTiburon", image: Tiburon, letter: "Tiburón" },
+      {id:"imgCalamar", image: Calamar, letter: "Pulpo" },
+      {id:"imgDelfin", image: Delfin, letter: "Delfín" }
     ]
   },
   {
