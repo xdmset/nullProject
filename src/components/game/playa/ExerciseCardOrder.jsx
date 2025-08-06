@@ -32,7 +32,7 @@ export default function ExerciseCardOrder({ exercise, onCheckAnswer, lives }) {
 
   return (
     <div className="text-center">
-      <p className="mb-4 font-semibold">{exercise.prompt}</p>
+      <p className="mb-4 font-semibold">{exercise.question}</p>
       <div className="flex gap-4 justify-center flex-wrap">
         {order.map((img, index) => (
           <img

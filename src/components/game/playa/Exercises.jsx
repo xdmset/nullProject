@@ -109,7 +109,7 @@ export const exercises = {
     {
       id: 10,
       type: "image-to-text",
-      question: "Elige la letra en seña mostrada",
+      question: "Elige la letra que corresponde a la seña mostrada",
       image: LetraH,
       correctAnswer: "H",
       options: ["H", "Q", "R", "S"]
