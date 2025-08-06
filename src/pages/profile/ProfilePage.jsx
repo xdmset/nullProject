@@ -82,7 +82,7 @@ const ProfilePage = () => {
   if (!user) return <ErrorState />;
 
   return (
-    <div className="min-h-screen bg-[#f8f2ff] px-4 py-8">
+    <div className="min-h-screen bg-[#f8f2ff] w-full px-0 py-0 w-80">
       <Header />
 
       <div className="max-w-6xl mx-auto flex justify-end mt-4">
