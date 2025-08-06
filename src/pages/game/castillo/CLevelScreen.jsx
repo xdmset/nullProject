@@ -221,7 +221,7 @@ export default function CLevelScreen() {
                     )}
                 </div>
                 {feedback.message && <FeedbackMessage message={feedback.message} type={feedback.type} />}
-                {lives > 0 && currentExercise && !["drag-drop", "matching", "dual-choice"].includes(currentExercise.type) && (
+                {lives > 0 && currentExercise && !["drag-drop", "matching", "dual-choice","single-image"].includes(currentExercise.type) && (
                     <button
                         onClick={checkAnswer}
                         disabled={!selectedOption || isChecking}

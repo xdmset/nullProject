@@ -552,7 +552,7 @@ export const exercises = {
         options: [
           "/src/assets/game/icons-castillo/familia/Nieta.png",
           "/src/assets/game/icons-castillo/familia/Hija.png",
-          "/src/assets/game/icons-castillo/familia/Sobrina.png",
+          "/src/assets/game/icons-castillo/familia/Sobrino.png",
           "/src/assets/game/icons-castillo/familia/Prima.png"
         ],
         question: "Selecciona la imagen correcta",
@@ -592,7 +592,7 @@ export const exercises = {
         type: "single-image",
         image: "/src/assets/game/icons-castillo/preguntas/comotellamas.png",
         question: "¿Qué pregunta representa esta seña?",
-        correctAnswer: "comotellamas",
+        correctAnswer: "¿Cómo te llamas?",
         points: 1
       },
       {
