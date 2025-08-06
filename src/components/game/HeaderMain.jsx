@@ -49,7 +49,7 @@ export default function HeaderMain() {
     <div className="relative bg-gradient-to-r from-[#005EB8] via-[#198E94] to-[#3D3D97] text-white w-full px-6 py-2 sm:py-3  shadow-md shadow-purple-500/40 z-50">
       <div className="max-w-screen-xl mx-auto flex justify-between items-center">
         {/* Logo */}
-        <header className="flex items-center px-4 py-0">
+        <header className="flex items-center px--70 py-0">
           {/* Logo a la izquierda */}
           <img
             src={logo}
