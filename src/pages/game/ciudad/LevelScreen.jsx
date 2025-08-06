@@ -170,10 +170,10 @@ export default function LevelScreen() {
         setShowLevelComplete(false);
     };
 
-const checkAnswer = (isCorrect) => {
-  if (lives <= 0) return;
-  isCorrect ? handleCorrectAnswer() : handleWrongAnswer();
-};
+    const checkAnswer = () => {
+        if (!selectedOption || lives <= 0 || isChecking) return;
+        handleAnswer(selectedOption);
+    };
 
 
     return (

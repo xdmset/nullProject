@@ -39,7 +39,7 @@ export default function JunglaPage() {
         ]);
 
         const baseLevels = mundoResponse.data.niveles || [];
-        const difficultyMap = [3, 4, 4, 5];
+        const difficultyMap = [4, 5, 4, 5];
 
         const updatedLevels = baseLevels.map((level, index) => ({
           ...level,

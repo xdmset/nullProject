@@ -14,7 +14,7 @@ export default function ExerciseCardSingleImage({ exercise, answer, setAnswer, c
       <div className="flex flex-col items-center">
         <input
           type="text"
-          value={answer}
+          value={answer ?? ""}
           onChange={(e) => lives > 0 && setAnswer(e.target.value)}
           placeholder={lives > 0 ? "Escribe tu respuesta..." : "Juego terminado"}
           className={`w-full max-w-md px-4 py-2 border-2 rounded-lg mb-4 focus:outline-none ${

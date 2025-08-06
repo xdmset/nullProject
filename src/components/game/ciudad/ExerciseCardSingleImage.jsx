@@ -65,7 +65,7 @@ export default function ExerciseCardSingleImage({ exercise, answer, setAnswer, c
           type="text"
           value={answer ?? ""}
           onChange={(e) => lives > 0 && setAnswer(e.target.value)}
-          placeholder={lives > 0 ? "Escribe tu respuesta (palabra o número)..." : "Juego terminado"}
+          placeholder={lives > 0 ? "Escribe tu respuesta (palabra)..." : "Juego terminado"}
           className={`w-full max-w-md px-4 py-2 border-2 rounded-lg mb-4 focus:outline-none ${
             lives > 0 ? "border-purple-300 focus:border-purple-500" : "border-gray-300"
           }`}

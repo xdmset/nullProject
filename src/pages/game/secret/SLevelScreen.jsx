@@ -29,7 +29,7 @@ export default function SLevelScreen() {
     };
     const levelKey = levelIdToKeyMap[levelId];
 
-    let numExercises = 20;
+    let numExercises = 15;
 
     const exercisesForLevel = useMemo(() => exercises[levelKey] || [], [levelKey]);
     const [levelExercises, generateRandomExercises] = useRandomExercises(numExercises, exercisesForLevel);
