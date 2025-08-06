@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Header from '../../../components/game/HeaderMain';
 import { getMaterialDidactico } from '../../../services/apiService';
 import { useNavigate } from 'react-router-dom';
+import Back from "../../../assets/icons/back.png";
 
 const VideosPage = () => {
     const [materiales, setMateriales] = useState([]);
@@ -63,13 +64,13 @@ const VideosPage = () => {
             <Header />
             <button
                 onClick={() => navigate("/world")}
-                className="fixed top-20 left-4 z-50 bg-[#412DB2] text-white px-4 py-2 rounded-md shadow-md hover:bg-[#229FA9] transition-colors flex items-center gap-2"
+                className="fixed top-20 left-4 z-50 text-white px-4 py-2 rounded-md shadow-md hover:bg-primary-200"
+                aria-label="Regresar al Mundo"
             >
-                ← Regresar al Mundo
+                <img src={Back} alt="Volver" className="w-6 h-6" />
             </button>
-
             <div className="pt-[70px] px-6 pb-12 max-w-7xl mx-auto">
-                <h1 className="text-3xl font-bold mb-8 text-[#412DB2] text-center">Videos por Temas</h1>
+                <h1 className="text-3xl font-bold mb-8 text-primary-500 text-center">Videos por Temas</h1>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                     {Object.entries(videosData).map(([category, videos]) => (
                         <div
@@ -77,7 +78,7 @@ const VideosPage = () => {
                             className="bg-white rounded-lg shadow-lg p-4 cursor-pointer hover:shadow-2xl transition-shadow"
                             onClick={() => openCategory(category)}
                         >
-                            <h2 className="text-xl font-semibold text-[#005EB8] mb-2">{category}</h2>
+                            <h2 className="text-xl font-semibold text-primary-700 mb-2">{category}</h2>
                             <p className="text-sm text-gray-600 mb-4 h-12 overflow-hidden">{videos[0].description}</p>
                             <img
                                 src={videos[0].thumbnail}

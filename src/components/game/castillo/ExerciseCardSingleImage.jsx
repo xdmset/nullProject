@@ -12,12 +12,21 @@ export default function ExerciseCardSingleImage({
     setAnswer('');
   }, [exercise, isChecking]);
 
-  // ✨ Nueva función local para validar mayúsculas/minúsculas
-  const handleCheckAnswer = () => {
-    const userInput = answer.trim().toLowerCase();
-    const correct = exercise.correctAnswer.trim().toLowerCase();
+  // Función para normalizar texto (quitar acentos, espacios, signos de puntuación y convertir a minúsculas)
+  const normalizeText = (text) => {
+    return text
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "") // Elimina acentos
+      .replace(/[¿?¡!,.]/g, "") // Elimina signos de puntuación
+      .replace(/\s+/g, ""); // Elimina todos los espacios
+  };
 
-    if (userInput === correct) {
+  const handleCheckAnswer = () => {
+    const normalizedUserInput = normalizeText(answer);
+    const normalizedCorrectAnswer = normalizeText(exercise.correctAnswer);
+
+    if (normalizedUserInput === normalizedCorrectAnswer) {
       checkAnswer(exercise.correctAnswer); // respuesta correcta
     } else {
       checkAnswer("wrong"); // respuesta incorrecta

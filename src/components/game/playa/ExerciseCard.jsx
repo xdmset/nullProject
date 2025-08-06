@@ -5,7 +5,7 @@ export default function ExerciseCard({ exercise, selectedOption, setSelectedOpti
     <div className="text-center">
       {/* Mostrar siempre la pregunta definida en el ejercicio */}
       <h2 className="text-xl font-semibold mb-4">
-        {exercise.question || exercise.text}
+        {exercise.question || exercise.prompt || exercise.text}
       </h2>
 
       {isImageOptions ? (

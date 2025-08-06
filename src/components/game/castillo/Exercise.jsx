@@ -390,15 +390,14 @@ export const exercises = {
         type: "single-image",
         image: "/src/assets/game/icons-castillo/familia/Abuela.png",
         question: "¿Qué familiar se representa en la imagen?",
-        correctAnswer: "Abuela",
-        points: 1
+        correctAnswer: "abuela",
       },
       {
         id: 28,
         type: "single-image",
         image: "/src/assets/game/icons-castillo/familia/Hermano.png",
         question: "Identifica al familiar en la imagen",
-        correctAnswer: "Hermano",
+        correctAnswer: "hermano",
         points: 1
       },
       {
@@ -406,48 +405,42 @@ export const exercises = {
         type: "single-image",
         image: "/src/assets/game/icons-castillo/familia/Cuñada.png",
         question: "¿Cómo se llama este miembro de la familia?",
-        correctAnswer: "Cuñada",
-        points: 1
+        correctAnswer: "cuñada",
       },
       {
         id: 30,
         type: "single-image",
         image: "/src/assets/game/icons-castillo/familia/Prima.png",
         question: "¿Qué parentesco familiar representa la imagen?",
-        correctAnswer: "Prima",
-        points: 1
+        correctAnswer: "prima",
       },
       {
         id: 31,
         type: "single-image",
         image: "/src/assets/game/icons-castillo/familia/Tio.png",
         question: "Escribe el parentesco correcto",
-        correctAnswer: "Tio",
-        points: 1
+        correctAnswer: "tio",
       },
       {
         id: 32,
         type: "single-image",
         image: "/src/assets/game/icons-castillo/familia/Sobrino.png",
         question: "¿Qué familiar se muestra?",
-        correctAnswer: "Sobrino",
-        points: 1
+        correctAnswer: "sobrino",
       },
       {
         id: 33,
         type: "single-image",
         image: "/src/assets/game/icons-castillo/familia/Nieta.png",
         question: "Identifica al familiar en la imagen",
-        correctAnswer: "Nieta",
-        points: 1
+        correctAnswer: "nieta",
       },
       {
         id: 34,
         type: "single-image",
         image: "/src/assets/game/icons-castillo/familia/Compadre.png",
         question: "¿Cómo se llama este miembro de la familia?",
-        correctAnswer: "Compadre",
-        points: 1
+        correctAnswer: "compadre",
       },
 
       // ========== DUAL CHOICE (3 ejercicios - Familia) ==========
@@ -470,7 +463,6 @@ export const exercises = {
           ]
         },
         question: "Selecciona la opción correcta",
-        points: 2
       },
       {
         id: 36,
