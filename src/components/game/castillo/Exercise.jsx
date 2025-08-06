@@ -407,7 +407,6 @@ export const exercises = {
         image: "/src/assets/game/icons-castillo/familia/Cuñada.png",
         question: "¿Cómo se llama este miembro de la familia?",
         correctAnswer: "Cuñada",
-        points: 1
       },
       {
         id: 30,
@@ -415,7 +414,6 @@ export const exercises = {
         image: "/src/assets/game/icons-castillo/familia/Prima.png",
         question: "¿Qué parentesco familiar representa la imagen?",
         correctAnswer: "Prima",
-        points: 1
       },
       {
         id: 31,
@@ -423,7 +421,6 @@ export const exercises = {
         image: "/src/assets/game/icons-castillo/familia/Tio.png",
         question: "Escribe el parentesco correcto",
         correctAnswer: "Tio",
-        points: 1
       },
       {
         id: 32,
@@ -431,7 +428,6 @@ export const exercises = {
         image: "/src/assets/game/icons-castillo/familia/Sobrino.png",
         question: "¿Qué familiar se muestra?",
         correctAnswer: "Sobrino",
-        points: 1
       },
       {
         id: 33,
@@ -439,7 +435,6 @@ export const exercises = {
         image: "/src/assets/game/icons-castillo/familia/Nieta.png",
         question: "Identifica al familiar en la imagen",
         correctAnswer: "Nieta",
-        points: 1
       },
       {
         id: 34,
@@ -447,7 +442,6 @@ export const exercises = {
         image: "/src/assets/game/icons-castillo/familia/Compadre.png",
         question: "¿Cómo se llama este miembro de la familia?",
         correctAnswer: "Compadre",
-        points: 1
       },
 
       // ========== DUAL CHOICE (3 ejercicios - Familia) ==========
@@ -470,7 +464,6 @@ export const exercises = {
           ]
         },
         question: "Selecciona la opción correcta",
-        points: 2
       },
       {
         id: 36,

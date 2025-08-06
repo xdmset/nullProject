@@ -1,15 +1,27 @@
 export default function ExerciseCard({ exercise, selectedOption, setSelectedOption, isImageOptions, lives }) {
   const optionLetters = ['a', 'b', 'c', 'd'];
   
+  // Determinar si debemos mostrar el texto adicional
+  const shouldShowAdditionalText = isImageOptions && 
+                                (exercise.text.includes('"') || 
+                                 exercise.text.includes('Selecciona') ||
+                                 exercise.text.includes('representa'));
+
   return (
     <div className="text-center">
-      {/* Mostrar siempre la pregunta definida en el ejercicio */}
+      {/* Título principal - siempre visible */}
       <h2 className="text-xl font-semibold mb-4">
         {exercise.question || exercise.text}
       </h2>
 
+      {/* Texto adicional para familiares/preguntas específicas */}
+      {isImageOptions && !shouldShowAdditionalText && exercise.text && (
+        <p className="text-lg font-bold mb-4 text-purple-700">
+          {exercise.text}
+        </p>
+      )}
+
       {isImageOptions ? (
-        // Modo para ejercicios con imágenes como opciones
         <div className="grid grid-cols-2 gap-4">
           {exercise.options.map((opt, index) => (
             <div
@@ -35,13 +47,14 @@ export default function ExerciseCard({ exercise, selectedOption, setSelectedOpti
           ))}
         </div>
       ) : (
-        // Modo para ejercicios con imagen como pregunta
         <>
-          <img
-            src={exercise.image}
-            alt="signo"
-            className="mx-auto w-72 h-72 object-contain mb-6"
-          />
+          {exercise.image && (
+            <img
+              src={exercise.image}
+              alt="signo"
+              className="mx-auto w-72 h-72 object-contain mb-6"
+            />
+          )}
           <div className="grid grid-cols-2 gap-4">
             {exercise.options.map((opt, index) => (
               <button
