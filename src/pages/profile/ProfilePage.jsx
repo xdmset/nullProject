@@ -1,14 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { parseISO, format } from 'date-fns';
 import es from 'date-fns/locale/es';
 import Header from "../../components/game/HeaderMain";
-import { AchievementsModal } from "./AchievementsModal";
+import AchievementsModal from "./AchievementsModal";
 import AvatarSelectionModal from './AvatarSelectionModal';
-import { getMe, getUserStats, updateUserProfile, getAvailableAvatars } from "../../services/apiService";
-import { useNavigate } from "react-router-dom";
+import { 
+    getMe, 
+    getUserStats, 
+    updateUserProfile, 
+    getAvailableAvatars, 
+    getUnlockedAvatars,
+    getAllAchievements,
+    getCurrentUserProgress // Añadimos esta importación
+} from "../../services/apiService";
 import logo from "../../assets/logo.png";
+import Back from '../../assets/icons/back.png';
 
-// --- Componente de Carga ---
 const Loader = () => (
   <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-[#f8f2ff] to-white">
     <img src={logo} alt="Cargando..." className="h-24 w-24 animate-pulse" />
@@ -16,7 +24,6 @@ const Loader = () => (
   </div>
 );
 
-// --- Componente de Error ---
 const ErrorState = () => {
   const navigate = useNavigate();
   return (
@@ -40,34 +47,54 @@ const ProfilePage = () => {
   const [user, setUser] = useState(null);
   const [stats, setStats] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const [avatarFileName, setAvatarFileName] = useState('avatar1.png');
+  const [avatarFileName, setAvatarFileName] = useState('default.png');
   const [availableAvatars, setAvailableAvatars] = useState([]);
+  const [unlockedAvatars, setUnlockedAvatars] = useState([]);
+  const [allAchievements, setAllAchievements] = useState([]);
+  const [userProgress, setUserProgress] = useState([]); // Nuevo estado para el progreso
   const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [showAchievementsModal, setShowAchievementsModal] = useState(false);
+  const navigate = useNavigate();
+
+  const fetchData = useCallback(async () => {
+    try {
+      const [
+        userRes, 
+        statsRes, 
+        availableAvatarsRes, 
+        unlockedAvatarsRes, 
+        allAchievementsRes,
+        progressRes // Nuevo: obtenemos el progreso del usuario
+      ] = await Promise.all([
+        getMe(),
+        getUserStats(),
+        getAvailableAvatars(),
+        getUnlockedAvatars(),
+        getAllAchievements(),
+        getCurrentUserProgress() // Nueva llamada al API
+      ]);
+      
+      setUser(userRes.data);
+      setStats(statsRes.data);
+      setAvailableAvatars(availableAvatarsRes.data);
+      setUnlockedAvatars(unlockedAvatarsRes.data);
+      setAllAchievements(allAchievementsRes.data);
+      setUserProgress(progressRes.data); // Guardamos el progreso
+
+      if (userRes.data.perfil && userRes.data.perfil.avatar) {
+        setAvatarFileName(userRes.data.perfil.avatar);
+      }
+    } catch (error) {
+      console.error("Error al cargar los datos del perfil:", error);
+      setUser(null);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [userResponse, statsResponse, avatarsResponse] = await Promise.all([
-          getMe(),
-          getUserStats(),
-          getAvailableAvatars()
-        ]);
-        setUser(userResponse.data);
-        setStats(statsResponse.data);
-        setAvailableAvatars(avatarsResponse.data);
-
-        if (userResponse.data.perfil && userResponse.data.perfil.avatar) {
-          setAvatarFileName(userResponse.data.perfil.avatar);
-        }
-      } catch (error) {
-        console.error("Error al cargar los datos del perfil:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   const handleSelectAvatar = async (newAvatarFile) => {
     try {
@@ -80,6 +107,42 @@ const ProfilePage = () => {
     }
   };
 
+  // Función para determinar logros desbloqueados basados en el progreso
+  const getUnlockedAchievements = () => {
+    if (!Array.isArray(userProgress) )return [];
+
+    // Mapeo de nombre de mundo a ID de logro
+    const worldToAchievementMap = {
+      "Playa": 1,
+      "Ciudad": 4,
+      "Jungla": 3,
+      "Castillo": 2,
+      "Mundo Misterioso": 11
+    };
+
+    // Logros por mundos completados
+    const unlocked = allAchievements.filter(achievement => {
+      return userProgress.some(progress => 
+        progress.mundo?.nombre && 
+        progress.porcentaje_avance === "100.00" &&
+        worldToAchievementMap[progress.mundo.nombre] === achievement.id
+      );
+    });
+
+    // Logro especial por completar todos los mundos
+    const totalWorlds = 5; // Ajusta según tu cantidad de mundos
+    const completedWorlds = userProgress.filter(p => p.porcentaje_avance === "100.00").length;
+    
+    if (completedWorlds >= totalWorlds) {
+      const allWorldsAchievement = allAchievements.find(a => a.id === 9);
+      if (allWorldsAchievement) {
+        unlocked.push(allWorldsAchievement);
+      }
+    }
+
+    return unlocked;
+  };
+
   if (isLoading) {
     return <Loader />;
   }
@@ -90,43 +153,55 @@ const ProfilePage = () => {
 
   const avatarUrl = `/avatars/${avatarFileName}`;
   
-  const unlockedAvatars = availableAvatars; 
-  const lockedAvatars = [];
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#f8f2ff] to-white">
       <Header />
       <div className="pt-[90px] px-4 md:px-10 pb-12 max-w-7xl mx-auto">
+        
+        <button 
+          onClick={() => navigate('/world')}
+          className="mb-6 flex items-center text-gray-600 hover:text-gray-900 font-semibold"
+        >
+          <img src={Back} alt="Volver" className="w-6 h-6 mr-2" />
+          Volver a Mundos
+        </button>
+
         <h1 className="text-3xl font-bold text-center text-[#412DB2] mb-6">
           Perfil del Usuario
         </h1>
         <div className="flex flex-col lg:flex-row gap-6 justify-center items-start">
           <Avatar avatarUrl={avatarUrl} onOpenModal={() => setShowAvatarModal(true)} />
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-6 w-full lg:w-auto">
             <ProfileCard user={user} />
             <Stats stats={stats} />
           </div>
-          <Achievements onOpenAchievementsModal={() => setShowAchievementsModal(true)} />
+          <Achievements 
+            onOpenAchievementsModal={() => setShowAchievementsModal(true)} 
+            unlockedCount={getUnlockedAchievements().length}
+          />
         </div>
       </div>
 
       {showAvatarModal && (
         <AvatarSelectionModal
           onClose={() => setShowAvatarModal(false)}
-          onSelectAvatar={handleSelectAvatar}
-          avatars={unlockedAvatars}
-          locked={lockedAvatars}
+          onSelect={handleSelectAvatar}
+          availableAvatars={availableAvatars}
+          unlockedAvatars={unlockedAvatars}
         />
       )}
 
-      {showAchievementsModal && (
-        <AchievementsModal onClose={() => setShowAchievementsModal(false)} achievements={user.logros} />
-      )}
+     
+{showAchievementsModal && (
+  <AchievementsModal 
+    onClose={() => setShowAchievementsModal(false)} 
+    allAchievements={allAchievements}
+    unlockedAchievements={getUnlockedAchievements()} // Pasamos los logros ya calculados
+  />
+)}
     </div>
   );
 };
-
-export default ProfilePage;
 
 // --- Componentes Hijos ---
 
@@ -154,11 +229,11 @@ export function ProfileCard({ user }) {
     : 'Fecha no disponible';
 
   return (
-    <div className="relative bg-white shadow-lg rounded-lg w-full max-w-md flex items-center p-4">
+    <div className="relative bg-white shadow-lg rounded-lg w-full lg:w-96 flex items-center p-4">
       <div className="ml-4">
-        <h2 className="text-xl font-semibold">{user.nombre_menor || user.username}</h2>
+        <h2 className="text-xl font-semibold">{user.perfil?.nombre_menor || user.username}</h2>
         <p className="text-gray-500">Se unió en {joinDate}</p>
-        <p className="text-gray-600 mt-2">Tutor: {user.perfil.nombre_padre} {user.perfil.apellidos_padre}</p>
+        <p className="text-gray-600 mt-2">Tutor: {user.perfil?.nombre_padre} {user.perfil?.apellidos_padre}</p>
       </div>
     </div>
   );
@@ -166,13 +241,13 @@ export function ProfileCard({ user }) {
 
 export function Stats({ stats }) {
   const statItems = [
-    { label: "Niveles completados", value: stats.completed_levels || 0 },
-    { label: "Mundos completados", value: stats.completed_worlds || 0 },
-    { label: "Logros obtenidos", value: stats.achievements_count || 0 },
+    { label: "Mundos completados", value: stats.mundos_completados || 0 },
+    { label: "Niveles completados", value: stats.niveles_completados || 0 },
+
   ];
 
   return (
-    <div className="bg-white shadow rounded-lg p-4 w-full max-w-sm">
+    <div className="bg-white shadow rounded-lg p-4 w-full lg:w-96">
       <h3 className="text-lg font-semibold mb-4 text-purple-700">Estadísticas</h3>
       <div className="grid grid-cols-2 gap-3">
         {statItems.map((s, idx) => (
@@ -186,10 +261,13 @@ export function Stats({ stats }) {
   );
 }
 
-export function Achievements({ onOpenAchievementsModal }) {
+export function Achievements({ onOpenAchievementsModal, unlockedCount }) {
   return (
-    <div className="bg-white shadow rounded-lg p-4 w-full max-w-sm text-center">
+    <div className="bg-white shadow rounded-lg p-4 w-full max-w-xs text-center">
       <h3 className="text-lg font-semibold mb-2 text-purple-700">Logros</h3>
+      <p className="text-sm text-gray-600 mb-3">
+        {unlockedCount} logros desbloqueados
+      </p>
       <button
         onClick={onOpenAchievementsModal}
         className="px-4 py-2 bg-[#412DB2] text-white rounded hover:bg-purple-800 transition"
@@ -199,3 +277,5 @@ export function Achievements({ onOpenAchievementsModal }) {
     </div>
   );
 }
+
+export default ProfilePage;

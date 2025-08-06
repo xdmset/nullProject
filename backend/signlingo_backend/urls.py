@@ -21,6 +21,7 @@ from users.views import (
     ExportMaterialDidacticoCSV,
     ProfileUpdateAPIView
 )
+from users.views import UserAchievementsAPIView
 
 # Crea el router para las rutas automáticas
 router = DefaultRouter()
@@ -60,6 +61,8 @@ urlpatterns = [
     # --- Endpoints de Autenticación ---
     path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/user/achievements/', UserAchievementsAPIView.as_view(), name='user-achievements'),
+
 ]
 
 # Añade el patrón para servir archivos de media en modo DEBUG

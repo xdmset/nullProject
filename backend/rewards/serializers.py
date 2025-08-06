@@ -11,10 +11,10 @@ class UsuarioSimpleSerializer(serializers.ModelSerializer):
         fields = ['username']
 
 class MundoSimpleSerializer(serializers.ModelSerializer):
-    """Serializer simple para mostrar solo el nombre del mundo."""
+    """Serializer simple para mostrar el id y nombre del mundo."""
     class Meta:
         model = Mundo
-        fields = ['nombre']
+        fields = ['id', 'nombre'] # Se asegura de incluir el ID
 
 # --- Serializers Principales ---
 class RecompensaSerializer(serializers.ModelSerializer):
@@ -31,7 +31,6 @@ class ProgresoReadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Progreso
-        # Se actualizan los campos para que coincidan con el modelo final
         fields = [
             'id', 'usuario', 'mundo', 'niveles_completados', 
             'porcentaje_avance', 'intentos_realizados', 'fecha_inicio', 'fecha_fin'
@@ -43,5 +42,4 @@ class ProgresoWriteSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Progreso
-        # Se actualizan los campos para que coincidan con el modelo final
         fields = ['usuario', 'mundo', 'niveles_completados', 'porcentaje_avance']

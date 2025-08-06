@@ -66,14 +66,22 @@ export const getMundoProgreso = (mundoId) => apiClient.get(`/api/v1/progresos/?m
 export const getMaterialDidactico = () => apiClient.get('/api/v1/materiales/');
 export const getUserDetail = (userId) => apiClient.get(`/api/v1/usuarios/${userId}/`);
 export const getProgressByUserId = (userId) => apiClient.get(`/api/v1/progresos/?usuario=${userId}`);
-
-// --- ESTA ES LA FUNCIÓN QUE FALTABA ---
 export const getUserProgress = () => apiClient.get('/api/v1/progresos/');
+export const getCurrentUserProgress = () => apiClient.get('/api/v1/progresos/');
+export const getAllAchievements = () => apiClient.get('/api/v1/logros/');
+export const getCategorias = () => apiClient.get('/api/v1/categorias/');
+export const getUnlockedAvatars = () => apiClient.get('/api/v1/avatars/unlocked/');
+
+// --- NUEVA FUNCIÓN PARA LOGROS DESBLOQUEADOS ---
+export const getUserAchievements = () => apiClient.get('/api/v1/usuarios/me/achievements/');
 
 // --- Funciones de Acciones ---
 export const createUser = (userData) => apiClient.post('/api/v1/usuarios/crear/', userData);
 export const updateUserProfile = (profileData) => apiClient.patch('/api/v1/perfil/update/', profileData);
 export const updateProgreso = (mundoId) => apiClient.post('/api/v1/progreso/update/', { mundo_id: mundoId });
+export const createMaterial = (formData) => apiClient.post('/api/v1/materiales/', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+});
 export const updateMaterial = (id, formData) => apiClient.patch(`/api/v1/materiales/${id}/`, formData, {
     headers: { 'Content-Type': 'multipart/form-data' }
 });
@@ -99,9 +107,5 @@ export const getActivityChartData = () => apiClient.get('/api/management/activit
 export const getMaterialTypeChartData = () => apiClient.get('/api/management/material-type-chart/');
 export const getMonthlyRegistrationsChartData = () => apiClient.get('/api/management/monthly-registrations-chart/');
 export const getWorldProgress = () => apiClient.get('/api/v1/progress/by-world/');
-export const getCategorias = () => apiClient.get('/api/v1/categorias/');
-export const createMaterial = (formData) => apiClient.post('/api/v1/materiales/', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' }
-});
 export const getWorldProgressChartData = () => apiClient.get('/api/management/world-progress-chart/');
-export const getCurrentUserProgress = () => apiClient.get('/api/v1/progresos/');
+ 

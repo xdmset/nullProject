@@ -116,14 +116,7 @@ export default function LoginPage({ onLoginSuccess }) {
                   ¡regístrate aquí!
                 </a>
               </p>
-              <p className="mt-1">
-                <a 
-                  onClick={(e) => { e.preventDefault(); navigate('/password'); }} 
-                  className="text-primary-300 underline hover:text-primary-500 transition"
-                >
-                  ¿Haz olvidado tu contraseña?
-                </a>
-              </p>
+             
             </div>
           </div>
 

@@ -8,7 +8,8 @@ from .views import (
     ExportUsersCSV,
     MeAPIView,
     UserStatsAPIView,
-    ProfileUpdateAPIView
+    ProfileUpdateAPIView,
+    UserAchievementsAPIView
 )
 
 router = DefaultRouter()
@@ -23,4 +24,5 @@ urlpatterns = [
     path('usuarios/me/', MeAPIView.as_view(), name='user-me'),
     path('usuarios/me/stats/', UserStatsAPIView.as_view(), name='user-stats'),
     path('perfil/update/', ProfileUpdateAPIView.as_view(), name='profile-update'),
+    path('api/user/achievements/', UserAchievementsAPIView.as_view(), name='user-achievements'),
 ]

@@ -64,27 +64,12 @@ TEMPLATES = [
 WSGI_APPLICATION = 'signlingo_backend.wsgi.application'
 
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "signlingo_db",
-        "USER": "postgres",
-        "PASSWORD": "Msiawy1087",
-        "HOST": "127.0.0.1",
-        "PORT": "5432",
-        "OPTIONS": {
-            "client_encoding": "UTF8",
-        },
-    }
-}
-
-# Database
 # DATABASES = {
 #     "default": {
 #         "ENGINE": "django.db.backends.postgresql",
 #         "NAME": "signlingo_db",
 #         "USER": "postgres",
-#         "PASSWORD": "240525",
+#         "PASSWORD": "Msiawy1087",
 #         "HOST": "127.0.0.1",
 #         "PORT": "5432",
 #         "OPTIONS": {
@@ -92,6 +77,21 @@ DATABASES = {
 #         },
 #     }
 # }
+
+# Database
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "signlingo_db",
+        "USER": "postgres",
+        "PASSWORD": "240525",
+        "HOST": "127.0.0.1",
+        "PORT": "5432",
+        "OPTIONS": {
+            "client_encoding": "UTF8",
+        },
+    }
+}
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
