@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import RewardModal from "../RewardModal";
 import { getMundoData, getMundoProgreso } from "../../../services/apiService";
-import Back from '../../../assets/icons/back.png';
+import Back from '../../../assets/icons/back.png'
 
 const MUNDO_ID = 2; // El ID para el mundo "Ciudad" en tu base de datos
 
@@ -23,11 +23,20 @@ export default function CityPage() {
                     getMundoProgreso(MUNDO_ID),
                 ]);
                 setLevels(mundoResponse.data.niveles || []);
+                const updatedLevels = (mundoResponse.data.niveles || []).map((level, index) => {
+                // Asignar dificultad específica a los primeros 4 niveles
+                const renderDifficulty = [3, 4, 4, 5];
+                if (index < 4) {
+                    return { ...level, difficulty: renderDifficulty[index] };
+                }
+                return level;
+            });
+            setLevels(updatedLevels);
                 if (progresoResponse.data.length > 0) {
                     setProgreso(progresoResponse.data[0]);
                 }
             } catch (error) {
-                console.error("Error al cargar los datos del mundo:", error);
+                console.error("Error al cargar los datos del mundo Playa:", error);
             } finally {
                 setIsLoading(false);
             }
@@ -35,7 +44,7 @@ export default function CityPage() {
         fetchData();
     }, []);
 
-    const nivelesCompletados = progreso ? progreso.niveles_completados : 0;
+const nivelesCompletados = progreso ? progreso.niveles_completados : 0;
     const shouldAnimateCofre = nivelesCompletados >= (levels.length || 4);
 
     const handleLevelClick = (level) => {
@@ -69,28 +78,29 @@ export default function CityPage() {
         ));
     };
 
-    const renderStars = (levelNumber) => {
-        // Esta lógica necesitaría que la API devuelva las estrellas por nivel.
-        // Por ahora, se asume 0.
-        const stars = 0; 
-        return (
-            <div className="flex justify-center gap-1 mt-2">
-                {[1, 2, 3].map((star, index) => (
-                    <img
-                        key={star}
-                        src={star <= stars ? "/src/assets/icons/star.png" : "/src/assets/icons/star-null.png"}
-                        alt={star <= stars ? "Estrella ganada" : "Estrella vacía"}
-                        className={`w-5 h-5 transition-transform duration-300 ${star <= stars ? "animate-bounce-slow hover:scale-110" : "opacity-70"}`}
-                        style={{ animationDelay: `${index * 0.1}s` }}
-                    />
-                ))}
-            </div>
-        );
-    };
+const renderStars = (levelNumber) => {
+    const starsKey = `levelStars-ciudad`; // igual que en LevelComplete (world = "playa")
+    const storedStars = JSON.parse(localStorage.getItem(starsKey)) || {};
+    const stars = storedStars[levelNumber] || 0;
+
+    return (
+        <div className="flex justify-center gap-1 mt-2">
+            {[1, 2, 3].map((star, index) => (
+                <img
+                    key={star}
+                    src={star <= stars ? "/src/assets/icons/star.png" : "/src/assets/icons/star-null.png"}
+                    alt={star <= stars ? "Estrella ganada" : "Estrella vacía"}
+                    className={`w-5 h-5 transition-transform duration-300 ${star <= stars ? "animate-bounce-slow hover:scale-110" : "opacity-70"}`}
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                />
+            ))}
+        </div>
+    );
+};
+
 
     const getCofreImage = () => {
-        const highestCompleted = nivelesCompletados;
-        const cofreLevel = Math.min(highestCompleted + 1, 5);
+        const cofreLevel = Math.min(nivelesCompletados + 1, 5);
         return `/src/assets/game/cofres/cofre${cofreLevel}.png`;
     };
 
@@ -148,7 +158,10 @@ export default function CityPage() {
                                             ¡Explora {level.nombre}!
                                         </h6>
                                         <div className="mt-3 text-center text-base text-purple-800 font-medium">
-                                            <p className="mb-2">Ejercicios: <span className="font-bold">{level.cantidad_ejercicio}</span></p>
+                                            <p className="mb-2">
+                                                Ejercicios: <span className="font-bold">{level.cantidad_ejercicio}</span> <br></br>
+                                                Dificultad: <span className="flex justify-center mb-2">{renderDifficulty(level.difficulty)}</span>
+                                            </p>
                                             {nivelesCompletados >= levelOrder && (
                                                 <div>
                                                     <p className="mb-1">Tus Estrellas:</p>

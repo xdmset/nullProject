@@ -16,7 +16,8 @@ class RecompensaViewSet(viewsets.ReadOnlyModelViewSet):
 
 class ProgresoViewSet(viewsets.ReadOnlyModelViewSet):
     """
-    ViewSet de SOLO LECTURA para ver el progreso de un usuario.
+    ViewSet de SOLO LECTURA para ver el progreso.
+    Admins y Asesores ven todos los progresos, Estudiantes solo el suyo.
     Permite filtrar por mundo.
     """
     serializer_class = ProgresoReadSerializer
@@ -25,17 +26,14 @@ class ProgresoViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         user = self.request.user
         
-        # --- LÓGICA CORREGIDA AQUÍ ---
-        
-        # 1. Determina el queryset base
-        # Si el usuario es admin/asesor, empieza con todos los progresos.
-        # Si es estudiante, solo los suyos.
-        if user.is_staff:
+        # Determina el queryset base. Si es admin (is_staff) o Asesor, puede ver todo.
+        if user.is_staff or (user.rol and user.rol.nombre == 'Asesor'):
             queryset = Progreso.objects.select_related('usuario', 'mundo').all()
         else:
+            # Si es un estudiante, solo ve su propio progreso
             queryset = Progreso.objects.select_related('usuario', 'mundo').filter(usuario=user)
         
-        # 2. Si la URL pide un mundo específico, aplica ese filtro SIEMPRE.
+        # Aplica el filtro de mundo si se proporciona en la URL (ej. /progresos/?mundo=2)
         mundo_id = self.request.query_params.get('mundo')
         if mundo_id is not None:
             queryset = queryset.filter(mundo_id=mundo_id)
@@ -63,7 +61,7 @@ class UpdateProgresoAPIView(APIView):
         progreso, created = Progreso.objects.get_or_create(
             usuario=user,
             mundo=mundo,
-            defaults={'niveles_completados': 0, 'porcentaje_avance': 0.0}
+            defaults={'niveles_completados': 0, 'porcentaje_avance': 0.0, 'intentos_realizados': 0}
         )
 
         progreso.intentos_realizados += 1
@@ -89,7 +87,7 @@ class WorldProgressAPIView(APIView):
     """
     Endpoint para obtener el progreso agregado de todos los usuarios por mundo.
     """
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         worlds = Mundo.objects.annotate(
@@ -108,9 +106,8 @@ class UserUnlockedAvatarsAPIView(APIView):
 
     def get(self, request, *args, **kwargs):
         user = self.request.user
-        # La lógica asume que Progreso tiene una relación con Nivel
-        completed_levels_ids = Progreso.objects.filter(usuario=user, porcentaje_avance=100).values_list('nivel_id', flat=True)
-        unlocked_rewards = Recompensa.objects.filter(nivel_id__in=completed_levels_ids)
+        completed_mundos_ids = Progreso.objects.filter(usuario=user, porcentaje_avance=100).values_list('mundo_id', flat=True)
+        unlocked_rewards = Recompensa.objects.filter(nivel__mundo_id__in=completed_mundos_ids)
         
         serializer = RecompensaSerializer(unlocked_rewards, many=True)
         return Response(serializer.data)

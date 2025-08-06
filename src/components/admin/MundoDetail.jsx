@@ -14,6 +14,7 @@ const MundoDetail = () => {
             try {
                 const response = await getMundoProgreso(mundoId);
                 setProgressList(response.data);
+                // Si hay datos, toma el nombre del mundo del primer registro
                 if (response.data.length > 0) {
                     setMundoNombre(response.data[0].mundo.nombre);
                 }
@@ -26,12 +27,12 @@ const MundoDetail = () => {
         fetchDetails();
     }, [mundoId]);
 
-    if (isLoading) return <p>Cargando detalles...</p>;
+    if (isLoading) return <p>Cargando detalles del mundo...</p>;
 
     return (
         <div>
             <Link to="/admin/mundos" className="text-indigo-600 hover:underline mb-6 inline-block">&larr; Volver a Progreso por Mundos</Link>
-            <h1 className="text-3xl font-bold text-gray-800 mb-6">Detalle de Progreso: {mundoNombre}</h1>
+            <h1 className="text-3xl font-bold text-gray-800 mb-6">Progreso de Estudiantes en: {mundoNombre}</h1>
             <div className="bg-white p-6 rounded-lg shadow-md">
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
@@ -46,7 +47,9 @@ const MundoDetail = () => {
                         {progressList.length > 0 ? progressList.map(p => (
                             <tr key={p.id}>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{p.usuario.username}</td>
-                                <td className="px-6 py-4 whitespace-nowrap"><ProgressBar progress={p.porcentaje_avance} /></td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                    <ProgressBar progress={p.porcentaje_avance} />
+                                </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{p.niveles_completados}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{p.intentos_realizados}</td>
                             </tr>

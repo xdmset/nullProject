@@ -1,4 +1,3 @@
-// src/components/admin/MonthlyRegistrationsChart.jsx
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
@@ -12,7 +11,8 @@ const MonthlyRegistrationsChart = ({ chartData }) => {
       {
         label: 'Nuevos Usuarios por Mes',
         data: chartData.data || [],
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        backgroundColor: '#412DB2',
+        maxBarThickness: 50, 
       },
     ],
   };
@@ -24,6 +24,14 @@ const MonthlyRegistrationsChart = ({ chartData }) => {
       legend: { position: 'top' },
       title: { display: true, text: 'Registros Mensuales de Usuarios' },
     },
+    scales: {
+        y: {
+            beginAtZero: true,
+            ticks: {
+                stepSize: 1
+            }
+        }
+    }
   };
 
   return <Bar data={data} options={options} />;

@@ -30,7 +30,7 @@ export const exercises = {
     {
       id: 1,
       type: "image-to-text",
-      prompt: "Selecciona la letra que representa esta seña",
+      question: "Selecciona la letra que representa esta seña",
       image: LetraA,
       correctAnswer: "A",
       options: ["A", "B", "C", "D"]
@@ -38,7 +38,7 @@ export const exercises = {
     {
       id: 2,
       type: "image-to-text",
-      prompt: "Selecciona la letra que representa esta seña",
+      question: "Selecciona la letra que representa esta seña",
       image: LetraD,
       correctAnswer: "D",
       options: ["F", "R", "G", "D"]
@@ -46,7 +46,7 @@ export const exercises = {
     {
       id: 3,
       type: "image-to-text",
-      prompt: "Identifica la letra en seña",
+      question: "Identifica la letra en seña",
       image: LetraR,
       correctAnswer: "R",
       options: ["Z", "R", "W", "F"]
@@ -54,7 +54,7 @@ export const exercises = {
     {
       id: 4,
       type: "image-to-text",
-      prompt: "Elige la letra en seña para la imagen mostrada",
+      question: "Elige la letra en seña para la imagen mostrada",
       image: LetraK,
       correctAnswer: "K",
       options: ["G", "H", "K", "Z"]
@@ -82,7 +82,7 @@ export const exercises = {
     {
       id: 7,
       type: "line-match",
-      prompt: "Une la seña con su letra correspondiente",
+      question: "Une la seña con su letra correspondiente",
       pairs: [
         { id: "imgE", image: LetraE, letter: "E" },
         { id: "imgF", image: LetraF, letter: "F" },
@@ -93,7 +93,7 @@ export const exercises = {
     {
       id: 8,
       type: "image-to-text",
-      prompt: "Selecciona la letra correcta",
+      question: "Selecciona la letra correcta",
       image: LetraF,
       correctAnswer: "F",
       options: ["H", "F", "G", "J"]
@@ -101,7 +101,7 @@ export const exercises = {
     {
       id: 9,
       type: "image-to-text",
-      prompt: "¿Qué letra en seña corresponde a la imagen?",
+      question: "¿Qué letra en seña corresponde a la imagen?",
       image: LetraG,
       correctAnswer: "G",
       options: ["S", "K", "P", "G"]
@@ -109,7 +109,7 @@ export const exercises = {
     {
       id: 10,
       type: "image-to-text",
-      prompt: "Elige la letra en seña mostrada",
+      question: "Elige la letra en seña mostrada",
       image: LetraH,
       correctAnswer: "H",
       options: ["H", "Q", "R", "S"]
@@ -117,7 +117,7 @@ export const exercises = {
     {
       id: 11,
       type: "order",
-      prompt: "Ordena estas letras según su orden alfabético",
+      question: "Ordena estas letras según su orden alfabético",
       images: [LetraH, LetraI, LetraG],
       letters: ["H", "I", "G"],
       correctOrder: ["G", "H", "I"]
@@ -125,7 +125,7 @@ export const exercises = {
     {
       id: 12,
       type: "match",
-      prompt: "Relaciona cada imagen de seña con la letra correcta",
+      question: "Relaciona cada imagen de seña con la letra correcta",
       pairs: [
         { id: "imgH", image: LetraH, letter: "H" },
         { id: "imgE", image: LetraE, letter: "E" },
@@ -134,7 +134,7 @@ export const exercises = {
     },
     {
       id: 13,
-      prompt: "Selecciona la letra representada",
+      question: "Selecciona la letra representada",
       type: "image-to-text",
       image: LetraI,
       correctAnswer: "I",
@@ -146,8 +146,8 @@ export const exercises = {
       id: 14,
       type: "input",
       image: Hello,
+      question: "¿Qué saludo representa esta seña?",
       correctAnswer: "Hola",
-      question: "¿Qué saludo representa esta seña?"
     },
     {
       id: 15,
@@ -199,7 +199,7 @@ export const exercises = {
     {
       id: 21,
       type: "match",
-      prompt: "Relaciona cada seña con la letra correcta",
+      question: "Relaciona cada seña con la letra correcta",
       pairs: [
         { id: "imgL", image: LetraL, letter: "L" },
         { id: "imgM", image: LetraM, letter: "M" },
@@ -210,7 +210,7 @@ export const exercises = {
     {
       id: 22,
       type: "line-match",
-      prompt: "Une la seña con su significado",
+      question: "Une la seña con su significado",
       pairs: [
         { id: "imgGoodbye", image: Goodbye, letter: "Adiós" },
         { id: "imgThankYou", image: ThankYou, letter: "Gracias" },
@@ -256,7 +256,7 @@ export const exercises = {
     {
       id: 27,
       type: "match",
-      prompt: "Relaciona cada letra con su seña correspondiente",
+      question: "Relaciona cada letra con su seña correspondiente",
       pairs: [
         { id: "imgR", image: LetraR, letter: "R" },
         { id: "imgI", image: LetraI, letter: "I" },
@@ -274,7 +274,7 @@ export const exercises = {
     {
       id: 29,
       type: "order",
-      prompt: "Ordena estas letras según el alfabeto",
+      question: "Ordena estas letras según el alfabeto",
       images: [LetraM, LetraK, LetraL],
       letters: ["M", "K", "L"],
       correctOrder: ["K", "L", "M"]

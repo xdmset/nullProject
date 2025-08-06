@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import LandingHeader from '../../components/game/HeaderMain';
-import { getContenido, getUserProgress } from "../../services/apiService";
+import { getContenido, getCurrentUserProgress } from "../../services/apiService";
 
 // Assets
 import mapa from "../../assets/mapa/MapaMenu.png";
@@ -28,13 +28,17 @@ const WorldSelect = () => {
       try {
         const [worldsResponse, progressResponse] = await Promise.all([
           getContenido(),
-          getUserProgress()
+          getCurrentUserProgress()
         ]);
         
         setWorlds(worldsResponse.data);
 
+        // --- CORRECCIÓN CLAVE AQUÍ ---
+        // Se usa 'prog.mundo.nombre' como clave para el mapa de progreso
         const progressMap = progressResponse.data.reduce((acc, prog) => {
-          acc[prog.mundo] = prog;
+          if (prog.mundo && prog.mundo.nombre) {
+            acc[prog.mundo.nombre] = prog;
+          }
           return acc;
         }, {});
         setProgress(progressMap);
@@ -48,7 +52,7 @@ const WorldSelect = () => {
     fetchData();
   }, []);
 
-    const createTone = (frequency, duration, type = "sine") => {
+  const createTone = (frequency, duration, type = "sine") => {
     try {
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
       const oscillator = audioContext.createOscillator();
@@ -68,18 +72,12 @@ const WorldSelect = () => {
 
   const playSoundForWorld = (id) => {
     switch (id) {
-      case 1: // Playa
-        createTone(440, 0.2); break;
-      case 2: // Ciudad
-        createTone(349.23, 0.2); break;
-      case 3: // Jungla
-        createTone(261.63, 0.2); break;
-      case 4: // Castillo
-        createTone(392, 0.2); break;
-      case 5: // Misterioso
-        createTone(220, 0.2); setTimeout(() => createTone(110, 0.2), 200); break;
-      default:
-        break;
+      case 1: createTone(440, 0.2); break;
+      case 2: createTone(349.23, 0.2); break;
+      case 3: createTone(261.63, 0.2); break;
+      case 4: createTone(392, 0.2); break;
+      case 5: createTone(220, 0.2); setTimeout(() => createTone(110, 0.2), 200); break;
+      default: break;
     }
   };
 
@@ -87,7 +85,6 @@ const WorldSelect = () => {
     createTone(523.25, 0.1);
     setTimeout(() => createTone(659.25, 0.1), 80);
   };
-
 
   const zones = [
     { id: 1, name: "Playa", top: "bottom-[80px]", left: "left-[25%]", color: "#FFB84C", icon: iconPlaya, route: "/playa" },
@@ -97,14 +94,12 @@ const WorldSelect = () => {
     { id: 5, name: "Mundo Misterioso", top: "bottom-[130px]", left: "left-[10%]", color: "#5c584c", icon: iconPregunta, route: "/secret", size: "w-[30px] h-[30px]" }
   ];
 
-    const menuButtons = [
+  const menuButtons = [
     { icon: Video, label: "Videos\nde Apoyo", route: "/videos" },
     { icon: Info, label: "Información\nImportante", route: "/info" },
     { icon: Chat, label: "Chat\nIA", route: "/chat" }
   ];
 
-  // --- CAMBIO AQUÍ ---
-  // Si está cargando, no muestra nada en lugar del texto
   if (isLoading) {
     return null;
   }
@@ -118,12 +113,14 @@ const WorldSelect = () => {
 
           {zones.map(({ id, top, left, color, icon, route, size, name }) => {
             const worldData = worlds.find(w => w.id === id);
-            const worldProgress = progress[id];
+            // --- CORRECCIÓN CLAVE AQUÍ ---
+            // Se busca el progreso usando el 'name' de la zona (ej. "Playa")
+            const worldProgress = progress[name];
             
             return (
               <div key={id} className="relative">
                 <div
-                  className={`absolute ${top} ${left} ${size || "w-[60px] h-[60px]"} bg-[${color}] border-[3px] border-[#1f2020] rounded-[50%_50%_50%_0] transform rotate-[-45deg] flex items-center justify-center shadow-md hover:scale-[1.15] transition-all cursor-pointer z-20`}
+                  className={`absolute ${top} ${left} ${size || "w-[60px] h-[60px]"} border-[3px] border-[#1f2020] rounded-[50%_50%_50%_0] transform rotate-[-45deg] flex items-center justify-center shadow-md hover:scale-[1.15] transition-all cursor-pointer z-20`}
                   style={{ backgroundColor: color }}
                   onClick={() => {
                     playSoundForWorld(id);
@@ -133,7 +130,7 @@ const WorldSelect = () => {
                   onMouseLeave={() => setActiveZone(null)}
                 >
                   <div className="w-[80%] h-[80%] rounded-full overflow-hidden flex items-center justify-center transform rotate-[45deg]">
-                    <img src={icon} alt={id} className="w-full h-full object-contain" />
+                    <img src={icon} alt={id.toString()} className="w-full h-full object-contain" />
                   </div>
                 </div>
 
@@ -144,7 +141,7 @@ const WorldSelect = () => {
                   >
                     <h3 className="text-center font-bold text-lg mb-2">{worldData?.nombre || name}</h3>
                     <p className="text-sm my-1">Niveles Completados: {worldProgress?.niveles_completados || 0}</p>
-                    <p className="text-sm my-1">% de Terminación: {worldProgress?.porcentaje_avance || 0}%</p>
+                    <p className="text-sm my-1">% de Terminación: {Math.round(parseFloat(worldProgress?.porcentaje_avance)) || 0}%</p>
                   </div>
                 )}
               </div>

@@ -4,6 +4,7 @@ import {
     getActivityChartData,
     getMaterialTypeChartData,
     getMonthlyRegistrationsChartData,
+    getWorldProgressChartData,
     triggerBackup,
     triggerFullRestore,
     triggerTableRestore,
@@ -16,6 +17,7 @@ import {
 import ActivityChart from './ActivityChart';
 import MaterialChart from './MaterialChart';
 import MonthlyRegistrationsChart from './MonthlyRegistrationsChart';
+import WorldProgressChart from './WorldProgressChart';
 
 // --- Sub-componente StatCard ---
 const StatCard = ({ title, value, icon }) => (
@@ -33,7 +35,7 @@ const AsesorStats = ({ stats }) => (
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
     <StatCard title="Estudiantes Activos" value={stats.estudiantesActivos || 0} icon="🎓" />
     <StatCard title="Promedio de Progreso" value={stats.promedioProgreso || '0%'} icon="📊" />
-    <StatCard title="Videos más Vistos" value={stats.videosMasVistos || 'N/A'} icon="▶️" />
+    <StatCard title="Material Didáctico" value={stats.materialDidacticoSubido || 0} icon="📚" />
   </div>
 );
 
@@ -188,27 +190,40 @@ El contenido (Mundos, Niveles, etc.) y los usuarios administradores NO se borrar
     );
 };
 
+
 // --- Componente Principal del Dashboard ---
 const Dashboard = ({ currentUserRole }) => {
     const [stats, setStats] = useState({});
     const [activityChartData, setActivityChartData] = useState({});
     const [materialChartData, setMaterialChartData] = useState({});
     const [monthlyChartData, setMonthlyChartData] = useState({});
+    const [worldProgressChartData, setWorldProgressChartData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
+            setIsLoading(true);
             try {
-                const [statsRes, activityRes, materialRes, monthlyRes] = await Promise.all([
-                    getDashboardStats(),
-                    getActivityChartData(),
-                    getMaterialTypeChartData(),
-                    getMonthlyRegistrationsChartData()
-                ]);
+                const statsRes = await getDashboardStats();
                 setStats(statsRes.data);
-                setActivityChartData(activityRes.data);
-                setMaterialChartData(materialRes.data);
-                setMonthlyChartData(monthlyRes.data);
+
+                if (currentUserRole === 'administrador') {
+                    const [activityRes, materialRes, monthlyRes] = await Promise.all([
+                        getActivityChartData(),
+                        getMaterialTypeChartData(),
+                        getMonthlyRegistrationsChartData()
+                    ]);
+                    setActivityChartData(activityRes.data);
+                    setMaterialChartData(materialRes.data);
+                    setMonthlyChartData(monthlyRes.data);
+                } else if (currentUserRole === 'asesor') {
+                    const [materialRes, worldProgressRes] = await Promise.all([
+                        getMaterialTypeChartData(),
+                        getWorldProgressChartData()
+                    ]);
+                    setMaterialChartData(materialRes.data);
+                    setWorldProgressChartData(worldProgressRes.data);
+                }
             } catch (error) {
                 console.error("Error al cargar datos del dashboard:", error);
             } finally {
@@ -216,7 +231,7 @@ const Dashboard = ({ currentUserRole }) => {
             }
         };
         fetchData();
-    }, []);
+    }, [currentUserRole]);
 
     if (isLoading) {
         return <p>Cargando dashboard...</p>;
@@ -230,24 +245,32 @@ const Dashboard = ({ currentUserRole }) => {
             
             {currentUserRole === 'administrador' ? <AdminStats stats={stats} /> : <AsesorStats stats={stats} />}
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
-                <div className="bg-white p-6 rounded-lg shadow-md">
-                    <div className="relative h-80">
-                        <ActivityChart chartData={activityChartData} />
+            {currentUserRole === 'administrador' && (
+                <>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+                        <div className="bg-white p-6 rounded-lg shadow-md">
+                            <div className="relative h-80"><ActivityChart chartData={activityChartData} /></div>
+                        </div>
+                        <div className="bg-white p-6 rounded-lg shadow-md">
+                            <div className="relative h-80"><MaterialChart chartData={materialChartData} /></div>
+                        </div>
+                    </div>
+                    <div className="mt-6 bg-white p-6 rounded-lg shadow-md">
+                        <div className="relative h-80"><MonthlyRegistrationsChart chartData={monthlyChartData} /></div>
+                    </div>
+                </>
+            )}
+
+            {currentUserRole === 'asesor' && (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+                    <div className="bg-white p-6 rounded-lg shadow-md">
+                        <div className="relative h-80"><MaterialChart chartData={materialChartData} /></div>
+                    </div>
+                    <div className="bg-white p-6 rounded-lg shadow-md">
+                        <div className="relative h-80"><WorldProgressChart chartData={worldProgressChartData} /></div>
                     </div>
                 </div>
-                <div className="bg-white p-6 rounded-lg shadow-md">
-                    <div className="relative h-80">
-                        <MaterialChart chartData={materialChartData} />
-                    </div>
-                </div>
-            </div>
-            
-            <div className="mt-6 bg-white p-6 rounded-lg shadow-md">
-                <div className="relative h-80">
-                    <MonthlyRegistrationsChart chartData={monthlyChartData} />
-                </div>
-            </div>
+            )}
         </div>
     );
 };

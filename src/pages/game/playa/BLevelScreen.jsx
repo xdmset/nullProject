@@ -3,12 +3,12 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { exercises } from "../../../components/game/playa/Exercises";
 import { useRandomExercises } from "../../../hooks/useRandomExercises";
 import { updateProgreso } from "../../../services/apiService";
-import ExerciseCard from "../../../components/game/playa/ExerciseCard";
 import FeedbackMessage from "../../../components/game/FeedbackMessage";
 import LoseOverlay from "../../../components/game/Loseoverlay";
 import Header from "../../../components/game/Header";
 import LevelComplete from '../../../components/game/levelComplete';
 
+import ExerciseCard from "../../../components/game/playa/ExerciseCard";
 import ExerciseCardSingleImage from "../../../components/game/playa/ExerciseCardSingleImage";
 import ExerciseCardDualChoice from "../../../components/game/playa/ExerciseCardDualChoice";
 import ExerciseCardOrder from "../../../components/game/playa/ExerciseCardOrder";
@@ -33,37 +33,94 @@ export default function BLevelScreen() {
     if (levelKey === "pantalla2" || levelKey === "pantalla3") numExercises = 7;
     else if (levelKey === "pantalla4") numExercises = 9;
 
-    const exercisesForLevel = useMemo(() => exercises[levelKey] || [], [levelKey]);
-    const [levelExercises, generateRandomExercises] = useRandomExercises(numExercises, exercisesForLevel);
+  // Memoizar ejercicios para evitar referencia cambiante
+  const exercisesForLevel = useMemo(() => {
+    return exercises[levelKey] || [];
+  }, [levelKey]);
 
-    const [current, setCurrent] = useState(0);
-    const [lives, setLives] = useState(3);
-    const [feedback, setFeedback] = useState({ message: "", type: "" });
-    const [selectedOption, setSelectedOption] = useState(null);
-    const [isChecking, setIsChecking] = useState(false);
-    const [showLevelComplete, setShowLevelComplete] = useState(false);
+  const [levelExercises, generateRandomExercises] = useRandomExercises(
+    numExercises,
+    exercisesForLevel
+  );
 
-    const currentExercise = levelExercises[current];
+  const [current, setCurrent] = useState(0);
+  const [lives, setLives] = useState(3);
+  const [feedback, setFeedback] = useState({ message: "", type: "" });
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [isChecking, setIsChecking] = useState(false);
+  const [showLevelComplete, setShowLevelComplete] = useState(false);
 
-    useEffect(() => {
-        if (!exercisesForLevel.length) {
-            navigate("/playa");
-            return;
+  const currentExercise = levelExercises[current];
+
+  // Al cambiar de nivel o resetear, generar ejercicios y resetear estados
+  useEffect(() => {
+    if (!exercisesForLevel.length) {
+      navigate("/playa");
+      return;
+    }
+    generateRandomExercises();
+    setCurrent(0);
+    setLives(3);
+    setFeedback({ message: "", type: "" });
+    setSelectedOption(null);
+    setShowLevelComplete(false);
+  }, [levelId, generateRandomExercises, navigate, exercisesForLevel]);
+ 
+  // Reiniciar si viene reset en state de navegación
+  useEffect(() => {
+    if (location.state?.reset) {
+      generateRandomExercises();
+      setCurrent(0);
+      setLives(3);
+      setFeedback({ message: "", type: "" });
+      setSelectedOption(null);
+      setShowLevelComplete(false);
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state, generateRandomExercises, navigate, exercisesForLevel, location.pathname]);
+
+    const createTone = (frequency, duration, type = "sine") => {
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            oscillator.type = type;
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        } catch {
+            console.warn("Sonido no disponible");
         }
-        restartLevel();
-    }, [levelId]);
-    
-    useEffect(() => {
-        if (location.state?.reset) {
-            restartLevel();
-            navigate(location.pathname, { replace: true, state: {} });
-        }
-    }, [location.state]);
+    };
 
-    const createTone = () => {};
-    const playCorrectSound = () => {};
-    const playWrongSound = () => {};
-    const playCelebrationSound = () => {};
+    const playCorrectSound = () => {
+        createTone(523.25, 0.15);
+        setTimeout(() => createTone(659.25, 0.15), 100);
+        setTimeout(() => createTone(783.99, 0.2), 200);
+    };
+
+    const playWrongSound = () => {
+        createTone(400, 0.2);
+        setTimeout(() => createTone(300, 0.3), 150);
+    };
+
+    const playCelebrationSound = () => {
+        const notes = [
+            { freq: 523.25, duration: 0.2, delay: 0 },
+            { freq: 659.25, duration: 0.2, delay: 150 },
+            { freq: 783.99, duration: 0.2, delay: 300 },
+            { freq: 1046.5, duration: 0.3, delay: 450 },
+        ];
+        notes.forEach(note => {
+            setTimeout(() => {
+                createTone(note.freq, note.duration, "triangle");
+            }, note.delay);
+        });
+    };
 
     const checkAnswer = () => {
         if (selectedOption === null || lives <= 0) return;

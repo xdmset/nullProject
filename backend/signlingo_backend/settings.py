@@ -63,20 +63,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'signlingo_backend.wsgi.application'
 
-# Database
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": "signlingo_db",
-#         "USER": "postgres",
-#         "PASSWORD": "Msiawy1087",
-#         "HOST": "127.0.0.1",
-#         "PORT": "5432",
-#         "OPTIONS": {
-#             "client_encoding": "UTF8",
-#         },
-#     }
-# }
+
 
 
 # Database
@@ -107,9 +94,11 @@ TIME_ZONE = 'America/Tijuana'
 USE_I18N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
+# Archivos Estáticos y de Media
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -127,7 +116,6 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ],
-    # --- AÑADIDO: Formato de fecha estándar ---
     'DATETIME_FORMAT': "%Y-%m-%dT%H:%M:%S.%fZ",
 }
 

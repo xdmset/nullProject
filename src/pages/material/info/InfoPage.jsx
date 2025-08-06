@@ -10,7 +10,7 @@ import "react-pdf/dist/Page/TextLayer.css";
 import pdfWorker from "pdfjs-dist/build/pdf.worker.mjs?url";
 pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker;
 
-// --- Mapa de imágenes para las portadas ---
+// Mapa de imágenes para las portadas de las categorías de PDF
 const categoryImages = {
   'Abecedario': '/portadas/abecedario.jpg',
   'Familia': '/portadas/familia.jpg',
@@ -19,7 +19,8 @@ const categoryImages = {
   'Colores': '/portadas/colores.jpg',
   'Numeros': '/portadas/numeros.jpg',
   'Animales': '/portadas/animales.jpg',
-  'Emociones': '/portadas/emociones.jpg'
+  'Emociones': '/portadas/emociones.jpg',
+  'General': '/portadas/default.png' // Imagen por defecto
 };
 
 const InfoPage = () => {
@@ -30,6 +31,7 @@ const InfoPage = () => {
   const [numPages, setNumPages] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
+  const API_URL = 'http://127.0.0.1:8000'; // URL base de tu backend
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,9 +51,16 @@ const InfoPage = () => {
     return materiales.reduce((acc, pdf) => {
       const category = pdf.categoria || 'General';
       if (!acc[category]) acc[category] = [];
+      
+      // Si la URL que viene de la API empieza con '/media/', es un archivo subido.
+      // Si no, es un archivo predeterminado que está en /public/pdfs/.
+      const pdfPath = pdf.url.startsWith('/media/') 
+        ? `${API_URL}${pdf.url}` 
+        : `/pdfs/${pdf.url}`;
+
       acc[category].push({
         titulo: pdf.descripcion,
-        pdf: `/pdfs/${pdf.url}`, // Construye la ruta a la carpeta public/pdfs
+        pdf: pdfPath,
         imagen: categoryImages[category] || categoryImages['General']
       });
       return acc;
@@ -69,6 +78,7 @@ const InfoPage = () => {
   
   const pdfList = selectedCategory ? pdfsData[selectedCategory] : [];
 
+  if (isLoading) return <div>Cargando...</div>;
 
   return (
     <div className="min-h-screen bg-[#f8f2ff] font-sans">
@@ -79,14 +89,14 @@ const InfoPage = () => {
       <div className="pt-[70px] px-6 pb-12 max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold mb-8 text-[#412DB2] text-center">Temas PDF en LSM</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          {Object.entries(pdfsData).map(([category, pdfList]) => (
+          {Object.entries(pdfsData).map(([category, pdfs]) => (
             <div
               key={category}
               className="bg-white rounded-lg shadow-lg p-4 cursor-pointer hover:shadow-2xl transition-shadow"
               onClick={() => openCategory(category)}
             >
               <h2 className="text-xl font-semibold text-[#005EB8] mb-2">{category}</h2>
-              <img src={pdfList[0].imagen} alt={category} className="rounded-md shadow-md w-full object-cover aspect-video" />
+              <img src={pdfs[0].imagen} alt={category} className="rounded-md shadow-md w-full object-cover aspect-video" />
             </div>
           ))}
         </div>
@@ -105,7 +115,7 @@ const InfoPage = () => {
               ))}
             </div>
             <div className="w-full border rounded shadow">
-              <Document file={pdfList[selectedPdfIndex]?.pdf} onLoadSuccess={onDocumentLoadSuccess}>
+              <Document file={pdfList[selectedPdfIndex]?.pdf} onLoadSuccess={onDocumentLoadSuccess} loading="Cargando PDF...">
                 <Page pageNumber={currentPage} />
               </Document>
               <div className="flex justify-between items-center mt-4">

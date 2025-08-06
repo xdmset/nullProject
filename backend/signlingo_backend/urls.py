@@ -2,10 +2,12 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenRefreshView
+from django.conf import settings
+from django.conf.urls.static import static
 
 # Importa TODAS las vistas que necesitarás
 from lessons.views import MundoViewSet, CategoriaViewSet, MaterialDidacticoViewSet
-from rewards.views import RecompensaViewSet, ProgresoViewSet, UpdateProgresoAPIView, WorldProgressAPIView
+from rewards.views import RecompensaViewSet, ProgresoViewSet, UpdateProgresoAPIView, WorldProgressAPIView, UserUnlockedAvatarsAPIView
 from users.views import (
     UsuarioViewSet,
     RolViewSet,
@@ -41,8 +43,9 @@ urlpatterns = [
     path('api/v1/usuarios/me/stats/', UserStatsAPIView.as_view(), name='user-stats'),
     path('api/v1/perfil/update/', ProfileUpdateAPIView.as_view(), name='profile-update'),
     path('api/v1/progreso/update/', UpdateProgresoAPIView.as_view(), name='update-progreso'),
-    path('api/v1/progress/by-world/', WorldProgressAPIView.as_view(), name='progress-by-world'), # <-- RUTA AÑADIDA
-    
+    path('api/v1/progress/by-world/', WorldProgressAPIView.as_view(), name='progress-by-world'),
+    path('api/v1/avatars/unlocked/', UserUnlockedAvatarsAPIView.as_view(), name='user-unlocked-avatars'),
+
     # --- Endpoints de Exportación ---
     path('api/v1/export/users-csv/', ExportUsersCSV.as_view(), name='export-users-csv'),
     path('api/v1/export/progreso-csv/', ExportProgresoCSV.as_view(), name='export-progreso-csv'),
@@ -58,3 +61,7 @@ urlpatterns = [
     path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
+
+# Añade el patrón para servir archivos de media en modo DEBUG
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
