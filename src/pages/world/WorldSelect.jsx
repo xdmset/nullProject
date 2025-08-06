@@ -13,7 +13,7 @@ import iconCastillo from "../../assets/mapa/CastleIcon.png";
 import iconPregunta from "../../assets/mapa/iconPregunta.png";
 import Video from '../../assets/icons/video.png';
 import Info from '../../assets/icons/book.png';
-import Chat from '../../assets/icons/SabioIcon.png';
+import Chat from '../../assets/icons/sabio.png';
 
 const WorldSelect = () => {
   const navigate = useNavigate();
