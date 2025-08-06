@@ -12,14 +12,14 @@ export default function ExerciseCardSingleImage({
     setAnswer('');
   }, [exercise, isChecking]);
 
-  // Función para normalizar texto (quitar acentos, espacios, signos de puntuación y convertir a minúsculas)
+  // Función mejorada para normalizar texto (maneja mayúsculas/minúsculas, acentos y espacios)
   const normalizeText = (text) => {
-    return text
-      .toLowerCase()
+    return String(text)
+      .toLowerCase() // Convierte todo a minúsculas
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "") // Elimina acentos
       .replace(/[¿?¡!,.]/g, "") // Elimina signos de puntuación
-      .replace(/\s+/g, ""); // Elimina todos los espacios
+      .replace(/\s+/g, ""); // Elimina espacios
   };
 
   const handleCheckAnswer = () => {
